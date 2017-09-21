@@ -69,6 +69,7 @@ public class LoginDelegate extends AsyncTask<String, Void, String> {
             String authPass = "true";
             String authStatus = reader.getString("authStatus");
             String username = reader.getString("username");
+
             if (authStatus.equals(authPass)) {
                 Log.v(TAG, "Logged in as " + username + ".");
                 loginController.loggedIn(true, username);

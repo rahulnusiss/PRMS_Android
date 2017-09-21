@@ -17,6 +17,7 @@ import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 
 public class RadioProgramAdapter extends ArrayAdapter<RadioProgram> {
 
+
     public RadioProgramAdapter(@NonNull Context context,  ArrayList<RadioProgram> radioPrograms) {
         super(context, 0, radioPrograms);
     }
@@ -35,14 +36,23 @@ public class RadioProgramAdapter extends ArrayAdapter<RadioProgram> {
         EditText radioPMName = (EditText)listItemView.findViewById(R.id.maintain_program_name_text_view);
         radioPMName.setText(currentRP.getRadioProgramName(), TextView.BufferType.NORMAL);
         radioPMName.setKeyListener(null); // This disables editing.
+        radioPMName.setClickable(false);
+        radioPMName.setFocusable(false);
+        radioPMName.setFocusableInTouchMode(false);
 
         EditText radioPMDesc = (EditText)listItemView.findViewById(R.id.maintain_program_desc_text_view);
         radioPMDesc.setText(currentRP.getRadioProgramDescription(), TextView.BufferType.NORMAL);
         radioPMDesc.setKeyListener(null);
+        radioPMDesc.setClickable(false);
+        radioPMDesc.setFocusable(false);
+        radioPMDesc.setFocusableInTouchMode(false);
 
         EditText radioPMDuration = (EditText)listItemView.findViewById(R.id.maintain_program_duration_text_view);
         radioPMDuration.setText(currentRP.getRadioProgramDuration(), TextView.BufferType.NORMAL);
         radioPMDuration.setKeyListener(null);
+        radioPMDuration.setClickable(false);
+        radioPMDuration.setFocusable(false);
+        radioPMDuration.setFocusableInTouchMode(false);
 
         return listItemView;
     }

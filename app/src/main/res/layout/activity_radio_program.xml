@@ -13,15 +13,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name"
+            android:focusable="false"
+            android:clickable="false"
             tools:text="Name" />
         <EditText
-        android:id="@+id/maintain_program_name_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Radio Program Name" />
+            android:id="@+id/maintain_program_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:clickable="false"
+            tools:text="Radio Program Name" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="false"
+            android:clickable="false"
             android:text="Description"
             tools:text="Description" />
 
@@ -29,17 +35,23 @@
             android:id="@+id/maintain_program_desc_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="false"
+            android:clickable="false"
             tools:text="one" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Duration"
+            android:focusable="false"
+            android:clickable="false"
             tools:text="Duration" />
 
         <EditText
             android:id="@+id/maintain_program_duration_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="false"
+            android:clickable="false"
             android:maxLength="8"
             android:text="00:30:00"
             tools:text="00:30:00" />

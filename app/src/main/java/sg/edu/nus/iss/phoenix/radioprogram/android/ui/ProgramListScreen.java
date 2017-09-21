@@ -55,6 +55,19 @@ public class ProgramListScreen extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.radio_pm_list);
         mListView.setAdapter(mRPAdapter);
 
+        // Setup the item click selection listener
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                view.setSelected(true);
+                // Log.v(TAG, "Radio program at position " + position + " selected.");
+                RadioProgram rp = (RadioProgram) adapterView.getItemAtPosition(position);
+                // Log.v(TAG, "Radio program name is " + rp.getRadioProgramName());
+                selectedRP = rp;
+            }
+
+        });
+
         // Setup the item selection listener
         mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -64,11 +77,17 @@ public class ProgramListScreen extends AppCompatActivity {
                 // Log.v(TAG, "Radio program name is " + rp.getRadioProgramName());
                 selectedRP = rp;
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                // your stuff
+            public void onNothingSelected(AdapterView<?> adapterView){
+
             }
         });
+
+        // Hard Coding To be removed
+        mRPAdapter.add(new RadioProgram("Program A", "Program B", "Program C"));
+        mRPAdapter.add(new RadioProgram("Program A2", "Program B2", "Program C2"));
+        mRPAdapter.add(new RadioProgram("Program A3", "Program B3", "Program C3"));
     }
 
     @Override
@@ -91,6 +110,7 @@ public class ProgramListScreen extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
+
         switch (item.getItemId()) {
             // Respond to a click on the "View" menu option
             case R.id.action_view:

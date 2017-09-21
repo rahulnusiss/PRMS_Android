@@ -18,7 +18,7 @@ public class MaintainProgramScreen extends AppCompatActivity {
     // Tag for logging
     private static final String TAG = MaintainProgramScreen.class.getName();
 
-    private EditText mRPNameEditText;
+        private EditText mRPNameEditText;
     private EditText mRPDescEditText;
     private EditText mDurationEditText;
     private RadioProgram rp2edit = null;
@@ -69,6 +69,7 @@ public class MaintainProgramScreen extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
+
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:

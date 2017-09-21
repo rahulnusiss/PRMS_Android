@@ -21,7 +21,10 @@ public class LoginController {
 
     public void login(String userName, String password) {
         loginScreen.showLoadingIndicator();
-        new LoginDelegate(this).execute(userName, password);
+        // Below comment should be removed after connection with backend
+        //new LoginDelegate(this).execute(userName, password);
+        // Below line should be removed after connection with backend
+        loggedIn(true, userName);
     }
 
     public void loggedIn(boolean success, String username) {
