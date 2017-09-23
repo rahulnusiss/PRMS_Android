@@ -57,7 +57,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Creating alert Dialog with one Button
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MaintainScheduleScreen.this);
+                /*AlertDialog.Builder alertDialog = new AlertDialog.Builder(MaintainScheduleScreen.this);
 
                 // Setting Dialog Title
                 alertDialog.setTitle("Create Schedule");
@@ -89,7 +89,8 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                             }
                         });
 
-                alertDialog.show();
+                alertDialog.show();*/
+                alertDialogDisplay("Create Schedule", true);
             }
         });
 
@@ -158,10 +159,10 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         // If this is a new radioprogram, hide the "Delete" menu item.
-        if (mProgramSlot2Edit == null) {
+        /*if (mProgramSlot2Edit == null) {
             MenuItem menuItem = menu.findItem(R.id.action_schedule_delete);
             menuItem.setVisible(false);
-        }
+        }*/
         return true;
     }
 
@@ -180,13 +181,13 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 else { // Edited.
                     Log.v(TAG, "Modifying schedule " + mSelectedPS.getName()+ "...");
                     // Modifying in alert dialog
-                    alertDialogForModify();
+                    alertDialogDisplay("Modify Schedule", false);
                 }
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_schedule_delete:
-                Log.v(TAG, "Deleting schedule " + mProgramSlot2Edit.getName() + "...");
-                ControlFactory.getScheduleController().selectDeleteSchedule(mProgramSlot2Edit);
+                Log.v(TAG, "Deleting schedule " + mSelectedPS.getName() + "...");
+                ControlFactory.getScheduleController().selectDeleteSchedule(mSelectedPS);
                 return true;
             // Respond to a click on the "Cancel" menu option
             case R.id.action_schedule_cancel:
@@ -198,25 +199,39 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         return true;
     }
 
-    private void alertDialogForModify(){
+    private void alertDialogDisplay(String iTitle, final boolean isCreate){
 
         Context context = this.getApplicationContext();
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
         // Creating alert Dialog with one Button
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MaintainScheduleScreen.this);
+        String s1 = "", s2 ="", s3 = "", s4 ="";
+        if ( isCreate ){
+            s1 = "Name";
+            s2 = "Date:2011-01-01T00:00:00+00:00";
+            s3 = "00:00:00";
+            s4 = "StartTime: 2011-01-01T00:00:00+00:00";
+            mSelectedPS = new ProgramSlot("");
+        }
+        else{
+            s1 = mSelectedPS.getName();
+            s2 = mSelectedPS.getDateOfProgram().toString();
+            s3 = mSelectedPS.getDuration().toString();
+            s4 = mSelectedPS.getStartTime().toString();
+        }
 
         // Setting Dialog Title
-        alertDialog.setTitle("Modify Schedule: " + mSelectedPS.getName());
+        alertDialog.setTitle(iTitle);
 
         final EditText input1 = new EditText(MaintainScheduleScreen.this);
-        input1.setText("Enter New Schedule Name",TextView.BufferType.NORMAL);
+        input1.setText(s1,TextView.BufferType.NORMAL);
         final EditText input2 = new EditText(MaintainScheduleScreen.this);
-        input2.setText("DateOfProgram: 2011-07-14T02:00:00+08:00 Format",TextView.BufferType.NORMAL);
+        input2.setText(s2,TextView.BufferType.NORMAL);
         final EditText input3 = new EditText(MaintainScheduleScreen.this);
-        input3.setText("Duration-00:00:00 format",TextView.BufferType.NORMAL);
+        input3.setText(s3,TextView.BufferType.NORMAL);
         final EditText input4 = new EditText(MaintainScheduleScreen.this);
-        input4.setText("StartTime: 2011-07-14T03:00:00+08:00 format",TextView.BufferType.NORMAL);
+        input4.setText(s4,TextView.BufferType.NORMAL);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
@@ -250,7 +265,10 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                         mSelectedPS.setDuration(psDuration);
                         String psStartTime = input4.getText().toString();
                         mSelectedPS.setStartTime(psStartTime);
-                        ControlFactory.getScheduleController().selectModifySchedule(mSelectedPS);
+                        if ( isCreate )
+                            ControlFactory.getScheduleController().selectCreateSchedule(mSelectedPS);
+                        else
+                            ControlFactory.getScheduleController().selectModifySchedule(mSelectedPS);
                     }
                 });
 

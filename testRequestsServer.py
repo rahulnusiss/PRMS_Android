@@ -16,7 +16,7 @@ def get_tasks():
     json_response = """{ "TestKeyRead" : "TestValueRead"}"""
     return Response(json_response, mimetype='application/json')
 
-@app.route('/phoenix/programslot/create',methods=['PUT'])
+@app.route('/phoenix/rest/programslot/create',methods=['PUT'])
 def get_tasks2():
     #json_data = jsonify(request.json)
     print(request.json) 
@@ -28,6 +28,20 @@ def get_tasks3():
     #json_data = jsonify(request.json)
     print(request.json) 
     json_response = """{ "psList": [ { "dateofProgram": "2011-07-14T02:00:00+08:00", "duration": "02:00:00", "programName": "test", "startTime": "2011-07-14T03:00:00+08:00" } ] }"""
+    return Response(json_response, mimetype='application/json')
+
+@app.route('/phoenix/rest/programslot/update',methods=['POST'])
+def get_tasks4():
+    #json_data = jsonify(request.json)
+    print(request.json) 
+    json_response = """{"ModifyKey":"ModifyValue"}"""
+    return Response(json_response, mimetype='application/json')
+
+@app.route('/phoenix/rest/programslot/delete',methods=['DELETE'])
+def get_tasks4():
+    #json_data = jsonify(request.json)
+    print(request.json) 
+    json_response = """{"ModifyKey":"ModifyValue"}"""
     return Response(json_response, mimetype='application/json')
 
 if __name__ == '__main__':

@@ -17,7 +17,7 @@ import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ProgramController;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
-import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_RADIO_PROGRAM;
+import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
 /**
  * Created by rahul on 9/21/2017.
@@ -36,7 +36,7 @@ public class UpdateScheduleDelegate extends AsyncTask<ProgramSlot, Void, Boolean
 
     @Override
     protected Boolean doInBackground(ProgramSlot... params) {
-        Uri builtUri = Uri.parse(PRMS_BASE_URL_RADIO_PROGRAM).buildUpon().build();
+        Uri builtUri = Uri.parse(PRMS_BASE_URL_SCHEDULE).buildUpon().build();
         builtUri = Uri.withAppendedPath(builtUri,"update").buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url = null;
@@ -50,8 +50,9 @@ public class UpdateScheduleDelegate extends AsyncTask<ProgramSlot, Void, Boolean
         JSONObject json = new JSONObject();
         try {
             json.put("name", params[0].getName());
-           // json.put("description", params[0].geDescription());
-           // json.put("typicalDuration", params[0].getRadioProgramDuration());
+            json.put("dateofProgram", params[0].getDateOfProgram().toString());
+            json.put("duration", params[0].getDuration().intValue());
+            json.put("startTime", params[0].getStartTime().toString());
         } catch (JSONException e) {
             Log.v(TAG, e.getMessage());
         }

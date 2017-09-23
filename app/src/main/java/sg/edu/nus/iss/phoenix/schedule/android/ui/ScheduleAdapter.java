@@ -12,6 +12,7 @@ import android.widget.TextView;
 import sg.edu.nus.iss.phoenix.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
@@ -41,11 +42,11 @@ public class ScheduleAdapter extends ArrayAdapter<ProgramSlot> {
         setEditTextAttr(radioPSName);
 
         EditText radioPSDateofPr = (EditText)listItemView.findViewById(R.id.maintain_schedule_dateOfPr_text_view);
-        radioPSDateofPr.setText("Date of program " + currentPS.getDateOfProgram().toString(), TextView.BufferType.NORMAL);
+        radioPSDateofPr.setText("Date of program " + currentPS.getDateOfProgram(), TextView.BufferType.NORMAL);
         setEditTextAttr(radioPSDateofPr);
 
         EditText radioPSDuration = (EditText)listItemView.findViewById(R.id.maintain_schedule_duration_text_view);
-        radioPSDuration.setText("Duration is " + currentPS.getDuration().toString(), TextView.BufferType.NORMAL);
+        radioPSDuration.setText(currentPS.getDuration().toString(), TextView.BufferType.NORMAL);
         setEditTextAttr(radioPSDuration);
 
         EditText radioPSStartTime = (EditText)listItemView.findViewById(R.id.maintain_schedule_starttime_text_view);

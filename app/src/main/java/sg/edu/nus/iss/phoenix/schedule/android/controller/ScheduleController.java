@@ -130,7 +130,7 @@ public class ScheduleController {
         // Go back to Maintain Program screen with refreshed Schedules.
         String toastString = "";
         if ( true == iStatus){
-            toastString = "Schedule Modify";
+            toastString = "Schedule Modified";
         }
         else{
             toastString = "Failed to modify schedule";
@@ -159,7 +159,7 @@ public class ScheduleController {
     }
 
     public void selectDeleteSchedule(ProgramSlot iProgramSlot){
-        new DeleteScheduleDelegate(this).execute(iProgramSlot.getName());
+        new DeleteScheduleDelegate(this).execute(iProgramSlot);
 
     }
 
