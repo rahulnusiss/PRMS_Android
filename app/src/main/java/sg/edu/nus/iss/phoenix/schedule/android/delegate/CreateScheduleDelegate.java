@@ -16,7 +16,7 @@ import java.net.URL;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
-import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_RADIO_PROGRAM;
+import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
 /**
  * Created by rahul on 9/21/2017.
@@ -35,7 +35,7 @@ public class CreateScheduleDelegate extends AsyncTask<ProgramSlot,Void,Boolean> 
 
     @Override
     protected Boolean doInBackground(ProgramSlot... params) {
-        Uri builtUri = Uri.parse(PRMS_BASE_URL_RADIO_PROGRAM).buildUpon().build();
+        Uri builtUri = Uri.parse(PRMS_BASE_URL_SCHEDULE).buildUpon().build();
         builtUri = Uri.withAppendedPath(builtUri,"create").buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url = null;

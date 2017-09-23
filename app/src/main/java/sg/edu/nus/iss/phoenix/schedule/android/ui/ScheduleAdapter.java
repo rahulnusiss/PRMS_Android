@@ -38,19 +38,27 @@ public class ScheduleAdapter extends ArrayAdapter<ProgramSlot> {
 
         EditText radioPSName = (EditText)listItemView.findViewById(R.id.maintain_schedule_name_text_view);
         radioPSName.setText(currentPS.getName(), TextView.BufferType.NORMAL);
-        radioPSName.setKeyListener(null); // This disables editing.
-        radioPSName.setClickable(false);
-        radioPSName.setFocusable(false);
-        radioPSName.setFocusableInTouchMode(false);
+        setEditTextAttr(radioPSName);
 
-        /*EditText radioPMDesc = (EditText)listItemView.findViewById(R.id.maintain_schedule_desc_text_view);
-        radioPMDesc.setText(*//*currentRP.getRadioProgramDescription()*//* "Tuesday 16:40", TextView.BufferType.NORMAL);
-        radioPMDesc.setKeyListener(null);
+        EditText radioPSDateofPr = (EditText)listItemView.findViewById(R.id.maintain_schedule_dateOfPr_text_view);
+        radioPSDateofPr.setText("Date of program " + currentPS.getDateOfProgram().toString(), TextView.BufferType.NORMAL);
+        setEditTextAttr(radioPSDateofPr);
 
-        EditText radioPMDuration = (EditText)listItemView.findViewById(R.id.maintain_schedule_duration_text_view);
-        radioPMDuration.setText(*//*currentRP.getRadioProgramDuration()*//* "Wednesday 11:30", TextView.BufferType.NORMAL);
-        radioPMDuration.setKeyListener(null);*/
+        EditText radioPSDuration = (EditText)listItemView.findViewById(R.id.maintain_schedule_duration_text_view);
+        radioPSDuration.setText("Duration is " + currentPS.getDuration().toString(), TextView.BufferType.NORMAL);
+        setEditTextAttr(radioPSDuration);
+
+        EditText radioPSStartTime = (EditText)listItemView.findViewById(R.id.maintain_schedule_starttime_text_view);
+        radioPSStartTime.setText("Start Time "+ currentPS.getStartTime().toString(), TextView.BufferType.NORMAL);
+        setEditTextAttr(radioPSStartTime);
 
         return listItemView;
+    }
+
+    private void setEditTextAttr( EditText iEditText ){
+        iEditText.setKeyListener(null);
+        iEditText.setClickable(false);
+        iEditText.setFocusable(false);
+        iEditText.setFocusableInTouchMode(false);
     }
 }

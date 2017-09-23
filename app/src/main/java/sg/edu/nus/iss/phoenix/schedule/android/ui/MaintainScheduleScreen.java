@@ -1,9 +1,11 @@
 package sg.edu.nus.iss.phoenix.schedule.android.ui;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
@@ -93,11 +97,18 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         setListViewListeners();
 
         // Hard coded to be removed
-        mScheduleAdapter.add(new ProgramSlot( "Kal" ));
-        mScheduleAdapter.add(new ProgramSlot( "Parso" ));
-        mScheduleAdapter.add(new ProgramSlot( "sdad" ));
-        mScheduleAdapter.add(new ProgramSlot( "Pa11rso" ));
+        //mScheduleAdapter.add(new ProgramSlot( "New1",new Date(),0,new Date()) );
+        //mScheduleAdapter.add(new ProgramSlot( "New2",new Date(),0,new Date()));
+        //mScheduleAdapter.add(new ProgramSlot( "New3",new Date(),0,new Date()) );
+        //mScheduleAdapter.add(new ProgramSlot( "New4",new Date(),0,new Date()) );
 
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        ControlFactory.getScheduleController().onDisplayScheduleList(this);
     }
 
     private void setListViewListeners(){
@@ -189,27 +200,56 @@ public class MaintainScheduleScreen extends AppCompatActivity {
 
     private void alertDialogForModify(){
 
+        Context context = this.getApplicationContext();
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
         // Creating alert Dialog with one Button
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MaintainScheduleScreen.this);
 
         // Setting Dialog Title
         alertDialog.setTitle("Modify Schedule: " + mSelectedPS.getName());
 
-        final EditText input = new EditText(MaintainScheduleScreen.this);
-        input.setText("Enter New Schedule Name",TextView.BufferType.NORMAL);
+        final EditText input1 = new EditText(MaintainScheduleScreen.this);
+        input1.setText("Enter New Schedule Name",TextView.BufferType.NORMAL);
+        final EditText input2 = new EditText(MaintainScheduleScreen.this);
+        input2.setText("DateOfProgram: 2011-07-14T02:00:00+08:00 Format",TextView.BufferType.NORMAL);
+        final EditText input3 = new EditText(MaintainScheduleScreen.this);
+        input3.setText("Duration-00:00:00 format",TextView.BufferType.NORMAL);
+        final EditText input4 = new EditText(MaintainScheduleScreen.this);
+        input4.setText("StartTime: 2011-07-14T03:00:00+08:00 format",TextView.BufferType.NORMAL);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
-        alertDialog.setView(input); // uncomment this line
+
+        // Set edit text parameters
+        input1.setLayoutParams(lp);
+        input2.setLayoutParams(lp);
+        input3.setLayoutParams(lp);
+        input4.setLayoutParams(lp);
+
+        // Add edit texts to layout
+        layout.addView(input1);
+        layout.addView(input2);
+        layout.addView(input3);
+        layout.addView(input4);
+
+        // Set alert dialog view to layout
+        alertDialog.setView(layout); // uncomment this line
+
 
         // Setting Positive "Save" Button
         alertDialog.setPositiveButton("SAVE",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int which) {
                         // Write your code here to execute after dialog
-                        String psName = input.getText().toString();
+                        String psName = input1.getText().toString();
                         mSelectedPS.setName(psName);
+                        String psDateofPr = input2.getText().toString();
+                        mSelectedPS.setDateOfProgram(psDateofPr);
+                        String psDuration = input3.getText().toString();
+                        mSelectedPS.setDuration(psDuration);
+                        String psStartTime = input4.getText().toString();
+                        mSelectedPS.setStartTime(psStartTime);
                         ControlFactory.getScheduleController().selectModifySchedule(mSelectedPS);
                     }
                 });
@@ -224,5 +264,17 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 });
 
         alertDialog.show();
+    }
+
+    public void displaySchedule(List<ProgramSlot> iProgramSlots){
+        mScheduleAdapter.clear();
+        for (int i = 0; i < iProgramSlots.size(); i++) {
+            mScheduleAdapter.add(iProgramSlots.get(i));
+        }
+    }
+
+    public void createSchedule() {
+        this.mProgramSlot2Edit = null;
+        mScheduleAdapter.add(new ProgramSlot("",new Date(),0,new Date()));
     }
 }
