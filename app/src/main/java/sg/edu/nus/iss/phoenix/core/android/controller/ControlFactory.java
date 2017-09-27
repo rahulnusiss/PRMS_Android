@@ -4,10 +4,12 @@ import sg.edu.nus.iss.phoenix.authenticate.android.controller.LoginController;
 import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ProgramController;
 import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ReviewSelectProgramController;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
+import sg.edu.nus.iss.phoenix.maintainuser.android.controller.UserController;
 
 public class ControlFactory {
     private static MainController mainController = null;
     private static LoginController loginController = null;
+    private static UserController userController = null;
 
     // Program
     private static ProgramController programController = null;
@@ -34,6 +36,11 @@ public class ControlFactory {
     public static ReviewSelectProgramController getReviewSelectProgramController() {
         if (reviewSelectProgramController == null) reviewSelectProgramController = new ReviewSelectProgramController();
         return reviewSelectProgramController;
+    }
+
+    public static UserController getUserController(){
+        if (userController == null) userController = new UserController();
+        return userController;
     }
 
     // Schedule use case functions

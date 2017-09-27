@@ -39,6 +39,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".core.android.ui.MainScreen" />
+        <activity android:name=".maintainuser.android.ui.UserListScreen" />
+        <activity android:name=".maintainuser.android.ui.MaintainUserScreen" />
         <activity android:name=".radioprogram.android.ui.ProgramListScreen" />
         <activity android:name=".radioprogram.android.ui.MaintainProgramScreen" />
         <activity android:name=".radioprogram.android.ui.ReviewSelectProgramScreen" />
