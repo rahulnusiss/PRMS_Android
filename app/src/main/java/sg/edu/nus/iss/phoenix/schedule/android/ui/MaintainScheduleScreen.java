@@ -26,6 +26,7 @@ import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
+import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 public class MaintainScheduleScreen extends AppCompatActivity {
@@ -90,7 +91,10 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                         });
 
                 alertDialog.show();*/
-                alertDialogDisplay("Create Schedule", true);
+//                alertDialogDisplay("Create Schedule", true);
+
+                Intent intent = new Intent(MainController.getApp(), ScheduledProgramScreen.class);
+                MainController.displayScreen(intent);
             }
         });
 

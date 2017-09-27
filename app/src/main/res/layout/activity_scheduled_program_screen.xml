@@ -57,5 +57,18 @@
         android:focusable="false"
         android:clickable="false"
         tools:text="Schedule Name" />
-
+    <Button
+        android:id="@+id/maintain_schedule_producer_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maintain_schedule_starttime_text_view"
+        android:text="Select Producer"
+        tools:text="Select Producer" />
+    <Button
+        android:id="@+id/maintain_schedule_presenter_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maintain_schedule_producer_button"
+        android:text="Select Presenter"
+        tools:text="Select Presenter" />
     </LinearLayout>
