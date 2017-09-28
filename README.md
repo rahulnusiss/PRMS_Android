@@ -1,6 +1,8 @@
 Android Architecture Components Basic Sample
 ===================================
 
+Use testRequestsServer.py as dummy server to test delegates by giving hard coded values. This will be removed afterwards.
+
 This sample showcases the following Architecture Components:
 
 * [Room](https://developer.android.com/topic/libraries/architecture/room.html)

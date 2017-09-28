@@ -38,7 +38,7 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
 
     // Tag for logging
     private static final String TAG = RetrieveScheduleDelegate.class.getName();
-    private SimpleDateFormat mSDF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ", Locale.ENGLISH);
+    private SimpleDateFormat mSDF = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     private ScheduleController mScheduleController;
     private ReviewSelectScheduledProgramController mReviewSelectScheduledProgramController;
@@ -101,6 +101,7 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
                     JSONObject psJson = psArray.getJSONObject(i);
 
                     // Convert to Date in try catch
+
                     String dateofProgram = psJson.getString("dateofProgram");
                     String duration = psJson.getString("duration");
                     Integer prDuration = getDuration(duration);
@@ -108,16 +109,16 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
                     String startTime = psJson.getString("startTime");
                     //Converting to Date format
                     Date dateOfPrTime = null;
-                    Date startTimePr = null;
+                    Integer startTimePr = getDuration(startTime);
+
                     try {
                         dateOfPrTime = mSDF.parse(dateofProgram);
-                        startTimePr = mSDF.parse(startTime);
                     }
                     catch(Exception e){
                         Log.v(TAG, "Date Parsing exception: " + e.getMessage());
                     }
-
-                    programSlots.add(new ProgramSlot(programName, dateOfPrTime, prDuration, startTimePr));
+                    java.sql.Date sqlDateofProgram = new java.sql.Date(dateOfPrTime.getTime());
+                    programSlots.add(new ProgramSlot(programName, sqlDateofProgram, prDuration, startTimePr));
                 }
             } catch (JSONException e) {
                 Log.v(TAG, e.getMessage());
@@ -133,7 +134,8 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
     }
 
     private Integer getDuration(String iDurationString){
-        String[] data = iDurationString.split(":");
+        String[] data = iDurationString.split(":|\\+");
+
 
         int hours  = Integer.parseInt(data[0]);
         int minutes = Integer.parseInt(data[1]);

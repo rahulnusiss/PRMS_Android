@@ -6,6 +6,5 @@
     <item
         android:id="@+id/action_select"
         android:title="@string/action_select"
-
         app:showAsAction="always" />
 </menu>

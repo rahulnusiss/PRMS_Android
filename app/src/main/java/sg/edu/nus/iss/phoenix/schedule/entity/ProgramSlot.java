@@ -18,24 +18,25 @@ public class ProgramSlot {
     private RadioProgram mRadioProgram;
     private SimpleDateFormat mSDF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ", Locale.ENGLISH);
 
-    private Date mDateOfProgram;
+    private java.sql.Date mDateOfProgram;
     private Integer mDuration;
-    private Date mStartTime;
+
+    private Integer mStartTimeofDay; // in seconds
 
     public ProgramSlot(String iName){
         this.mName = iName;
         mRadioProgram = new RadioProgram("Empty", "Empty", "Empty");
-        mDateOfProgram = new Date();
+        mDateOfProgram = new java.sql.Date(new Date().getTime());
         mDuration = 00;
-        mStartTime = new Date();
+        mStartTimeofDay = 00;
     }
 
-    public ProgramSlot(String iName, Date iDateofProgram, Integer iDuration, Date iStartTime){
+    public ProgramSlot(String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime){
         this.mName = iName;
         mRadioProgram = new RadioProgram("Empty", "Empty", "Empty");
         mDateOfProgram = iDateofProgram;
         mDuration = iDuration;
-        mStartTime = iStartTime;
+        mStartTimeofDay = iStartTime;
     }
 
     public void setRadioProgram(RadioProgram iRadioPr){
@@ -51,12 +52,14 @@ public class ProgramSlot {
         return mRadioProgram;
     }
 
-    public Date getDateOfProgram(){
+    public java.sql.Date getDateOfProgram(){
         return mDateOfProgram;
     }
     public void setDateOfProgram( String iDateofProgram) {
         try {
-            mDateOfProgram = mSDF.parse(iDateofProgram);
+            Date date = mSDF.parse(iDateofProgram);
+            mDateOfProgram = new java.sql.Date(date.getTime());
+            //mDateOfProgram = mSDF.parse(iDateofProgram);
         } catch (Exception e) {
             //print e.getMessage
         }
@@ -70,15 +73,11 @@ public class ProgramSlot {
     }
 
 
-    public Date getStartTime(){
-        return mStartTime;
+    public Integer getStartTime(){
+        return mStartTimeofDay;
     }
     public void setStartTime( String iStartTime){
-        try {
-            mStartTime = mSDF.parse(iStartTime);
-        } catch (Exception e) {
-            //print e.getMessage
-        }
+        mStartTimeofDay = ScheduleUtility.parseDuration(iStartTime);
     }
 
     public boolean isProgramSlotAssigned(AnnualScheduleList iAnnualScheduleList){

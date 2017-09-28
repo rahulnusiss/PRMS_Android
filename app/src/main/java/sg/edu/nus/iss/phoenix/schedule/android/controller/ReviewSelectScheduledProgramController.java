@@ -2,7 +2,6 @@ package sg.edu.nus.iss.phoenix.schedule.android.controller;
 
 import java.util.List;
 
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramScreen;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;

@@ -15,6 +15,7 @@ import java.net.URL;
 
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
@@ -28,15 +29,27 @@ public class CreateScheduleDelegate extends AsyncTask<ProgramSlot,Void,Boolean> 
     private static final String TAG = CreateScheduleDelegate.class.getName();
 
     private final ScheduleController scheduleController;
+    private boolean isCopy = false;
 
     public CreateScheduleDelegate(ScheduleController scheduleController) {
         this.scheduleController = scheduleController;
     }
 
+    public CreateScheduleDelegate(ScheduleController scheduleController, boolean isCopy) {
+        this.scheduleController = scheduleController;
+        this.isCopy = isCopy;
+    }
+
     @Override
     protected Boolean doInBackground(ProgramSlot... params) {
         Uri builtUri = Uri.parse(PRMS_BASE_URL_SCHEDULE).buildUpon().build();
-        builtUri = Uri.withAppendedPath(builtUri,"create").buildUpon().build();
+        if(isCopy){
+            builtUri = Uri.withAppendedPath(builtUri,"copy").buildUpon().build();
+        }
+        // Create schedule
+        else {
+            builtUri = Uri.withAppendedPath(builtUri, "create").buildUpon().build();
+        }
         Log.v(TAG, builtUri.toString());
         URL url = null;
         try {
@@ -49,8 +62,9 @@ public class CreateScheduleDelegate extends AsyncTask<ProgramSlot,Void,Boolean> 
         JSONObject json = new JSONObject();
         try {
             json.put("name", params[0].getName());
-            //json.put("description", params[0].getRadioProgramDescription());
-            //json.put("typicalDuration", params[0].getRadioProgramDuration());
+            json.put("dateofProgram", params[0].getDateOfProgram().toString());
+            json.put("duration", ScheduleUtility.parseDuration(params[0].getDuration()));
+            json.put("startTime", ScheduleUtility.parseDuration(params[0].getStartTime()));
         } catch (JSONException e) {
             Log.v(TAG, e.getMessage());
         }

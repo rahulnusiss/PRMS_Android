@@ -86,19 +86,24 @@ public class ScheduleUtility {
 
     public static boolean isProgramSlotOverlap(ProgramSlot iSlot, ProgramSlot iProgramSlot){
 
-        Date PSDate = iProgramSlot.getStartTime();
+        java.sql.Date PSDate = iProgramSlot.getDateOfProgram();
+        int PSStartTime = iProgramSlot.getStartTime().intValue();
         int PSDuration = iProgramSlot.getDuration().intValue();
         Calendar cal = Calendar.getInstance();
 
         cal.setTime(PSDate); // iPSDate  is start date
-        cal.add(Calendar.SECOND, PSDuration);
+        cal.add(Calendar.SECOND, PSStartTime); // Add start time to the day: Start time
+        Date psDateStart = cal.getTime();
+        cal.add(Calendar.SECOND, PSDuration); // Add duration to the start time: End time
         Date psDateEnd = cal.getTime();
 
-        Date dateStart = iSlot.getStartTime();
+        java.sql.Date dateStart = iSlot.getDateOfProgram();
         cal.setTime(dateStart);
+        cal.add(Calendar.SECOND, iSlot.getStartTime().intValue());
+        Date slotDateStart = cal.getTime();
         cal.add(Calendar.SECOND,iSlot.getDuration().intValue());
-        Date dateEnd = cal.getTime();
-        if ( overlap(dateStart, dateEnd, PSDate, psDateEnd)){
+        Date slotDateEnd = cal.getTime();
+        if ( overlap(slotDateStart, slotDateEnd, psDateStart, psDateEnd)){
             return true;
         }
         return false;
@@ -109,12 +114,14 @@ public class ScheduleUtility {
     }
 
     public static Integer parseDuration(String iDurationString){
-        String[] data = iDurationString.split(":");
+        if ( iDurationString.length() == 0){
+            return 0;
+        }
+        String[] data = iDurationString.split(":|\\+");
 
         int hours  = Integer.parseInt(data[0]);
         int minutes = Integer.parseInt(data[1]);
         int seconds = Integer.parseInt(data[2]);
-
         return (seconds + 60 * minutes + 3600 * hours);
     }
 
@@ -125,7 +132,10 @@ public class ScheduleUtility {
         Integer min = new Integer(rem/60);
         Integer sec = new Integer(rem % 60);
 
-        return (hr.toString()+":"+min.toString()+":"+sec.toString());
+        String strHour = "", strMinute = "", strSecond = "";
+        if( hr < 10){strHour = "0"+hr.toString();}else{strHour = hr.toString();}
+        if( min < 10){strMinute = "0"+min.toString();}else{strMinute = min.toString();}
+        if( sec < 10){strSecond = "0"+sec.toString();}else{strSecond = sec.toString();}
+        return (strHour+":"+strMinute+":"+strSecond);
     }
-
 }

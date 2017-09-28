@@ -46,7 +46,6 @@
         <activity android:name=".radioprogram.android.ui.MaintainProgramScreen" />
         <activity android:name=".radioprogram.android.ui.ReviewSelectProgramScreen" />
         <activity android:name=".schedule.android.ui.MaintainScheduleScreen" />
-        <activity android:name=".schedule.android.ui.ReviewSelectScheduledProgramController" />
         <activity android:name=".schedule.android.ui.ScheduledProgramScreen"></activity>
     </application>
 

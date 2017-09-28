@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
@@ -29,6 +28,7 @@ import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
+import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
@@ -80,8 +80,8 @@ public class MaintainScheduleScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //alertDialogDisplay("Create Schedule", true);
-		Intent intent = new Intent(MainController.getApp(), ScheduledProgramScreen.class);
-		MainController.displayScreen(intent);
+		        Intent intent = new Intent(MainController.getApp(), ScheduledProgramScreen.class);
+		        MainController.displayScreen(intent);
             }
         });
 
@@ -105,6 +105,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        // Automatically gets all the program slots from backend using retrieve delegate
         ControlFactory.getScheduleController().onDisplayScheduleList(this);
     }
 
@@ -252,7 +253,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 else { // Edited.
                     Log.v(TAG, "Modifying schedule " + mSelectedPS.getName()+ "...");
                     // Modifying in alert dialog
-                    alertDialogDisplay("Modify Schedule", false);
+                    alertDialogDisplay("Modify Schedule");
                 }
                 return true;
             // Respond to a click on the "Delete" menu option
@@ -265,12 +266,23 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 Log.v(TAG, "Canceling creating/editing schedule...");
                 ControlFactory.getScheduleController().selectCancelCreateEditSchedule();
                 return true;
+            case R.id.action_schedule_copy:
+                Log.v(TAG, "Copying schedule...");
+                if (mSelectedPS == null) { // Nothing selected from list.
+                    Log.v(TAG, "No schedule selected"  + "...");
+                    Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Please select a schedule to copy", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else {
+                    ControlFactory.getScheduleController().selectCopySchedule(mSelectedPS);
+                }
+                return true;
         }
 
         return true;
     }
 
-    private void alertDialogDisplay(String iTitle, final boolean isCreate){
+    private void alertDialogDisplay(String iTitle){
 
         Context context = this.getApplicationContext();
         LinearLayout layout = new LinearLayout(context);
@@ -278,19 +290,11 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         // Creating alert Dialog with one Button
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MaintainScheduleScreen.this);
         String s1 = "", s2 ="", s3 = "", s4 ="";
-        if ( isCreate ){
-            s1 = "Name";
-            s2 = "Date:2011-01-01T00:00:00+00:00";
-            s3 = "00:00:00";
-            s4 = "StartTime: 2011-01-01T00:00:00+00:00";
-            mSelectedPS = new ProgramSlot("");
-        }
-        else{
-            s1 = mSelectedPS.getName();
-            s2 = mSelectedPS.getDateOfProgram().toString();
-            s3 = mSelectedPS.getDuration().toString();
-            s4 = mSelectedPS.getStartTime().toString();
-        }
+
+        s1 = mSelectedPS.getName();
+        s2 = mSelectedPS.getDateOfProgram().toString();
+        s3 = mSelectedPS.getDuration().toString();
+        s4 = mSelectedPS.getStartTime().toString();
 
         // Setting Dialog Title
         alertDialog.setTitle(iTitle);
@@ -327,40 +331,34 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int which) {
                         // Write your code here to execute after dialog
-                        ProgramSlot tempPS = new ProgramSlot("");
-                        String psName = input1.getText().toString();
-                        tempPS.setName(psName);
-                        //mSelectedPS.setName(psName);
-                        String psDateofPr = input2.getText().toString();
-                        tempPS.setDateOfProgram(psDateofPr);
-                        //mSelectedPS.setDateOfProgram(psDateofPr);
-                        String psDuration = input3.getText().toString();
-                        tempPS.setDuration(psDuration);
-                        //mSelectedPS.setDuration(psDuration);
-                        String psStartTime = input4.getText().toString();
-                        tempPS.setStartTime(psStartTime);
-                        //mSelectedPS.setStartTime(psStartTime);
+                        boolean isValid = validateModifyInput(input1, input2, input3, input4);
+                        if (isValid) {
+                            ProgramSlot tempPS = new ProgramSlot("");
+                            String psName = input1.getText().toString();
+                            tempPS.setName(psName);
+                            //mSelectedPS.setName(psName);
+                            String psDateofPr = input2.getText().toString();
+                            tempPS.setDateOfProgram(psDateofPr);
+                            //mSelectedPS.setDateOfProgram(psDateofPr);
+                            String psDuration = input3.getText().toString();
+                            tempPS.setDuration(psDuration);
+                            //mSelectedPS.setDuration(psDuration);
+                            String psStartTime = input4.getText().toString();
+                            tempPS.setStartTime(psStartTime);
+                            //mSelectedPS.setStartTime(psStartTime);
 
-                        if (isCreate) {
-                            if ( tempPS.isProgramSlotAssigned(mAnnualScheduleList)){
-                                Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
-                                toast.show();
-                            }
-                            else {
-                                mSelectedPS = tempPS;
-                                ControlFactory.getScheduleController().selectCreateSchedule(mSelectedPS);
-                            }
-                        }
-                        else {
                             // Check if slots overlap for current modifying schedule.
-                            if(checkProgramSlotOverlap(tempPS)){
+                            if (checkProgramSlotOverlap(tempPS)) {
                                 Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
                                 toast.show();
-                            }
-                            else {
+                            } else {
                                 mSelectedPS = tempPS;
                                 ControlFactory.getScheduleController().selectModifySchedule(mSelectedPS);
                             }
+                        }
+                        else{
+                            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Unable to modify program slot", Toast.LENGTH_SHORT);
+                            toast.show();
                         }
                     }
                 });
@@ -403,6 +401,29 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         return status;
     }
 
+    private boolean validateModifyInput(EditText inputName, EditText inputDateOfPr, EditText inputDuration, EditText inputStartTime){
+        String regexp = "^\\d{2}:\\d{2}:\\d{2}$";
+        if( 0 == inputName.length() || 0 == inputDateOfPr.length() || 0 == inputDuration.length() || 0 == inputStartTime.length()){
+            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid one or more values", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+        // Check valid duration input
+        else if(!String.valueOf(inputDuration.getText()).matches(regexp)){
+            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid Duration value", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+
+        else if(!String.valueOf(inputStartTime.getText()).matches(regexp)){
+            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid Start Time value", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+
+        return true;
+    }
+
     public void displaySchedule(List<ProgramSlot> iProgramSlots){
         mScheduleAdapter.clear();
         for (int i = 0; i < iProgramSlots.size(); i++) {
@@ -440,7 +461,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         }
     }
 
-    public void createSchedule() {
+   /* public void createSchedule() {
         mScheduleAdapter.add(new ProgramSlot("",new Date(),0,new Date()));
-    }
+    }*/
 }

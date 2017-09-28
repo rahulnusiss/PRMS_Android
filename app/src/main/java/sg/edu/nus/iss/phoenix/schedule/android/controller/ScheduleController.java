@@ -156,11 +156,10 @@ public class ScheduleController {
 
     public void selectCancelCreateEditSchedule(){
 
-
     }
 
     public void selectCopySchedule(ProgramSlot iProgramSlot){
-
+        new CreateScheduleDelegate(this, true).execute(iProgramSlot);
     }
 
     public void selectCreateSchedule(ProgramSlot iProgramSlot){
