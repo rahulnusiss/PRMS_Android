@@ -29,8 +29,12 @@ import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
+<<<<<<< Updated upstream
+import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
+=======
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;
+>>>>>>> Stashed changes
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
@@ -79,9 +83,48 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //alertDialogDisplay("Create Schedule", true);
-		Intent intent = new Intent(MainController.getApp(), ScheduledProgramScreen.class);
-		MainController.displayScreen(intent);
+<<<<<<< Updated upstream
+                // Creating alert Dialog with one Button
+                /*AlertDialog.Builder alertDialog = new AlertDialog.Builder(MaintainScheduleScreen.this);
+
+                // Setting Dialog Title
+                alertDialog.setTitle("Create Schedule");
+                //
+                final EditText input = new EditText(MaintainScheduleScreen.this);
+                input.setText("Enter Schedule Name",TextView.BufferType.NORMAL);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                alertDialog.setView(input); // uncomment this line
+
+                // Setting Positive "Save" Button
+                alertDialog.setPositiveButton("SAVE",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int which) {
+                                // Write your code here to execute after dialog
+                                String psName = input.getText().toString();
+                                ControlFactory.getScheduleController().selectCreateSchedule(new ProgramSlot(psName));
+                            }
+                        });
+
+                // Setting Negative "CANCEL" Button
+                alertDialog.setNegativeButton("CANCEL",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to execute after dialog
+                                dialog.cancel();
+                            }
+                        });
+
+                alertDialog.show();*/
+//                alertDialogDisplay("Create Schedule", true);
+
+                Intent intent = new Intent(MainController.getApp(), ScheduledProgramScreen.class);
+                MainController.displayScreen(intent);
+=======
+                alertDialogDisplay("Create Schedule", true);
+>>>>>>> Stashed changes
             }
         });
 

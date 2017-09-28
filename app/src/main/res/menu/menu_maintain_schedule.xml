@@ -15,4 +15,13 @@
         android:title="@string/action_delete"
         app:showAsAction="always" />
 
+    <item android:id="@+id/spinner_year"
+        android:title="Year-All"
+        app:showAsAction="always"
+        app:actionViewClass="android.widget.Spinner" />
+
+    <item android:id="@+id/spinner_week"
+        android:title="Week-All"
+        app:showAsAction="always"
+        app:actionViewClass="android.widget.Spinner" />
 </menu>

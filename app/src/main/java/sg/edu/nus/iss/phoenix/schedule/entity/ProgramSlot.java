@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 /**
  * Created by rahul on 9/19/2017.
@@ -24,6 +25,9 @@ public class ProgramSlot {
     public ProgramSlot(String iName){
         this.mName = iName;
         mRadioProgram = new RadioProgram("Empty", "Empty", "Empty");
+        mDateOfProgram = new Date();
+        mDuration = 00;
+        mStartTime = new Date();
     }
 
     public ProgramSlot(String iName, Date iDateofProgram, Integer iDuration, Date iStartTime){
@@ -62,7 +66,7 @@ public class ProgramSlot {
         return mDuration;
     }
     public void setDuration(String iDuration){
-        mDuration = parseDuration(iDuration);
+        mDuration = ScheduleUtility.parseDuration(iDuration);
     }
 
 
@@ -77,13 +81,7 @@ public class ProgramSlot {
         }
     }
 
-    private Integer parseDuration(String iDurationString){
-        String[] data = iDurationString.split(":");
-
-        int hours  = Integer.parseInt(data[0]);
-        int minutes = Integer.parseInt(data[1]);
-        int seconds = Integer.parseInt(data[2]);
-
-        return (seconds + 60 * minutes + 3600 * hours);
+    public boolean isProgramSlotAssigned(AnnualScheduleList iAnnualScheduleList){
+        return ScheduleUtility.isProgramSlotOverlap(iAnnualScheduleList,this);
     }
 }

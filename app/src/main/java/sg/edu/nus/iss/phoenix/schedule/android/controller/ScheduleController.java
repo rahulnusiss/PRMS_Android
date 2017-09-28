@@ -18,6 +18,7 @@ import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
+import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 /**
  * Created by rahul on 9/19/2017.
@@ -44,6 +45,10 @@ public class ScheduleController {
         this.maintainScheduleScreen = maintainScheduleScreen;
         new RetrieveScheduleDelegate(this).execute("all");
 
+    }
+
+    public AnnualScheduleList getListAnnualSchedule(){
+        return listAnnualSchedule;
     }
 
     public void onDisplayScheduleProgram(/*MaintainScheduleScreen*/){
@@ -142,6 +147,10 @@ public class ScheduleController {
 
     public void scheduleRetrieved(List<ProgramSlot> iProgramSlots){
         boolean status = (iProgramSlots == null)?false:true;
+        if ( status ){
+            listAnnualSchedule = ScheduleUtility.prepareLists(iProgramSlots);
+            maintainScheduleScreen.setAnnualScheduleList(listAnnualSchedule);
+        }
         maintainScheduleScreen.displaySchedule(iProgramSlots);
     }
 

@@ -7,6 +7,7 @@ import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveScheduleDelegate
 import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramScreen;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 /**
  * Created by rahul on 9/19/2017.
@@ -32,7 +33,10 @@ public class ReviewSelectScheduledProgramController {
 
     public void programSlotsRetrieved(List<ProgramSlot> iListProgramSlots){
         // TBD
-        //displaySchedule() for ScheduledProgramScreen
+        boolean status = (iListProgramSlots == null)?false:true;
+        if ( status ){
+            mAnnualScheduleList = ScheduleUtility.prepareLists(iListProgramSlots);
+        }
     }
 
     public void reviewSelectScheduledProgram(){

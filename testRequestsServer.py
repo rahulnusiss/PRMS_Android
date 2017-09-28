@@ -27,7 +27,7 @@ def get_tasks2():
 def get_tasks3():
     #json_data = jsonify(request.json)
     print(request.json) 
-    json_response = """{ "psList": [ { "dateofProgram": "2011-07-14T02:00:00+08:00", "duration": "02:00:00", "programName": "test", "startTime": "2011-07-14T03:00:00+08:00" } ] }"""
+    json_response = """{ "psList": [ { "dateofProgram": "2011-07-14T02:00:00+08:00", "duration": "02:00:00", "programName": "test", "startTime": "2011-07-14T03:00:00+08:00" } , { "dateofProgram": "2013-08-15T03:00:00+08:00", "duration": "01:00:00", "programName": "test2", "startTime": "2013-08-15T03:00:00+08:00" }, { "dateofProgram": "2013-08-16T03:00:00+08:00", "duration": "04:00:00", "programName": "test3", "startTime": "2013-08-16T03:00:00+08:00" }, { "dateofProgram": "2011-08-14T03:00:00+08:00", "duration": "04:00:00", "programName": "test4", "startTime": "2011-08-14T03:00:00+08:00" }, { "dateofProgram": "2011-10-14T03:00:00+08:00", "duration": "04:00:00", "programName": "test5", "startTime": "2011-10-14T03:00:00+08:00" }, { "dateofProgram": "2013-11-14T03:00:00+08:00", "duration": "04:00:00", "programName": "test6", "startTime": "2013-11-14T03:00:00+08:00" }, { "dateofProgram": "2017-12-14T03:00:00+08:00", "duration": "04:00:00", "programName": "test7", "startTime": "2017-12-14T03:00:00+08:00" }] }"""
     return Response(json_response, mimetype='application/json')
 
 @app.route('/phoenix/rest/programslot/update',methods=['POST'])
@@ -38,7 +38,7 @@ def get_tasks4():
     return Response(json_response, mimetype='application/json')
 
 @app.route('/phoenix/rest/programslot/delete',methods=['DELETE'])
-def get_tasks4():
+def get_tasks5():
     #json_data = jsonify(request.json)
     print(request.json) 
     json_response = """{"ModifyKey":"ModifyValue"}"""
@@ -46,3 +46,5 @@ def get_tasks4():
 
 if __name__ == '__main__':
     app.run(debug=False,port=9000)
+
+    # { "dateofProgram": "2017-12-14T03:00:00+08:00", "duration": "04:00:00", "programName": "test7", "startTime": "2017-12-14T03:00:00+08:00" }
