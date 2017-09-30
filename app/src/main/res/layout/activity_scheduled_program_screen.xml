@@ -54,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/maintain_schedule_duration_text_view"
         tools:text="Schedule Name" />
+
     <Button
         android:id="@+id/maintain_schedule_producer_button"
         android:layout_width="match_parent"
@@ -68,4 +69,11 @@
         android:layout_below="@id/maintain_schedule_producer_button"
         android:text="Select Presenter"
         tools:text="Select Presenter" />
+    <Button
+      android:id="@+id/maintain_schedule_radioProgram_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/maintain_schedule_presenter_button"
+      android:text="Select RadioPr"
+      tools:text="Select RadioPr" />
     </LinearLayout>

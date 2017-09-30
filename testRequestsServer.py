@@ -51,6 +51,13 @@ def get_tasks6():
     json_response = """{ "TestKeyCopy" : "TestValueCopy"}"""
     return Response(json_response, mimetype='application/json')
 
+@app.route('/phoenix/rest/programslot/modify',methods=['PUT'])
+def get_tasks7():
+    #json_data = jsonify(request.json)
+    print(request.json) 
+    json_response = """{ "TestKeyCopy" : "TestValueCopy"}"""
+    return Response(json_response, mimetype='application/json')
+
 if __name__ == '__main__':
     app.run(debug=False,port=9000)
 

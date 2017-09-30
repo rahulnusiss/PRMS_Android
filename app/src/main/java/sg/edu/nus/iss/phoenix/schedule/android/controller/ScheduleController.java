@@ -8,6 +8,7 @@ import java.util.List;
 
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.CreateScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.DeleteScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveScheduleDelegate;
@@ -34,6 +35,21 @@ public class ScheduleController {
     private WeeklySchedule weeklySchedule = null;
     private AnnualSchedule annualSchedule = null;
     private AnnualScheduleList listAnnualSchedule = null;
+    private String radioProgram = null;
+
+    public void setProgramSlot(ProgramSlot iProgramSlot){
+        programSlot = iProgramSlot;
+    }
+    public ProgramSlot getProgramSlot(){
+        return programSlot;
+    }
+
+    public void setRadioProgram(String iProgramSlot){
+        radioProgram = iProgramSlot;
+    }
+    public String getRadioProgram(){
+        return radioProgram;
+    }
 
     public void startUseCase(){
         programSlot = null;
@@ -149,7 +165,7 @@ public class ScheduleController {
         boolean status = (iProgramSlots == null)?false:true;
         if ( status ){
             listAnnualSchedule = ScheduleUtility.prepareLists(iProgramSlots);
-            maintainScheduleScreen.setAnnualScheduleList(listAnnualSchedule);
+            //maintainScheduleScreen.setAnnualScheduleList(listAnnualSchedule);
         }
         maintainScheduleScreen.displaySchedule(iProgramSlots);
     }
@@ -171,8 +187,8 @@ public class ScheduleController {
 
     }
 
-    public void selectModifySchedule(ProgramSlot iProgramSlot){
-        new UpdateScheduleDelegate(this).execute(iProgramSlot);
+    public void selectModifySchedule(ProgramSlot iProgramSlotToEdit, ProgramSlot iNewProgramSlot){
+        new UpdateScheduleDelegate(this).execute(iProgramSlotToEdit, iNewProgramSlot);
     }
 
     public void startCreateSchedule(ProgramSlot iProgramSlot){

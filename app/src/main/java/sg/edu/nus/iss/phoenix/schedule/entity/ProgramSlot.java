@@ -2,6 +2,7 @@ package sg.edu.nus.iss.phoenix.schedule.entity;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -15,41 +16,70 @@ import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 public class ProgramSlot {
     private String mName;
-    private RadioProgram mRadioProgram;
+    private String mRadioProgram;
     private SimpleDateFormat mSDF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ", Locale.ENGLISH);
 
     private java.sql.Date mDateOfProgram;
     private Integer mDuration;
+    private String mPresenter;
+    private String mProducer;
 
     private Integer mStartTimeofDay; // in seconds
 
+    public void setPresenter(String iPresenter){
+        mPresenter = iPresenter;
+    }
+    public String getPresenter(){
+        return mPresenter;
+    }
+    public void setProducer(String iPresenter){
+        mPresenter = iPresenter;
+    }
+    public String getProducer(){
+        return mPresenter;
+    }
     public ProgramSlot(String iName){
         this.mName = iName;
-        mRadioProgram = new RadioProgram("Empty", "Empty", "Empty");
+        mRadioProgram = "";
         mDateOfProgram = new java.sql.Date(new Date().getTime());
         mDuration = 00;
         mStartTimeofDay = 00;
+        mPresenter = "";
+        mProducer = "";
     }
 
     public ProgramSlot(String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime){
         this.mName = iName;
-        mRadioProgram = new RadioProgram("Empty", "Empty", "Empty");
+        mRadioProgram = "";
         mDateOfProgram = iDateofProgram;
         mDuration = iDuration;
         mStartTimeofDay = iStartTime;
+        mPresenter = "";
+        mProducer = "";
     }
 
-    public void setRadioProgram(RadioProgram iRadioPr){
+    public ProgramSlot(String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime,
+                       String iRadioProgram, String iPresenter, String iProducer){
+        this.mName = iName;
+        mRadioProgram = iRadioProgram;
+        mDateOfProgram = iDateofProgram;
+        mDuration = iDuration;
+        mStartTimeofDay = iStartTime;
+        mPresenter = iPresenter;
+        mProducer = iProducer;
+    }
+
+    public void setRadioProgram(String iRadioPr){
         mRadioProgram = iRadioPr;
+    }
+    public String getRadioProgram(){
+        return mRadioProgram;
     }
     public void setName(String iName){
         mName = iName;
     }
     public String getName(){
         return mName;
-    }
-    public RadioProgram getRadioProgram(){
-        return mRadioProgram;
     }
 
     public java.sql.Date getDateOfProgram(){

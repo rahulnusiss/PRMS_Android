@@ -107,6 +107,9 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
                     Integer prDuration = getDuration(duration);
                     String programName = psJson.getString("programName");
                     String startTime = psJson.getString("startTime");
+                    //String radioProgram = psJson.getString("radioProgram");
+                    //String presenter = psJson.getString("presenter");
+                    //String producer = psJson.getString("producer");
                     //Converting to Date format
                     Date dateOfPrTime = null;
                     Integer startTimePr = getDuration(startTime);
@@ -118,7 +121,7 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
                         Log.v(TAG, "Date Parsing exception: " + e.getMessage());
                     }
                     java.sql.Date sqlDateofProgram = new java.sql.Date(dateOfPrTime.getTime());
-                    programSlots.add(new ProgramSlot(programName, sqlDateofProgram, prDuration, startTimePr));
+                    programSlots.add(new ProgramSlot(programName, sqlDateofProgram, prDuration, startTimePr,"","",""));//radioProgram,presenter,producer));
                 }
             } catch (JSONException e) {
                 Log.v(TAG, e.getMessage());

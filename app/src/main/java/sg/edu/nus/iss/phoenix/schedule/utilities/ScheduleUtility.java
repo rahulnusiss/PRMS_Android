@@ -1,8 +1,10 @@
 package sg.edu.nus.iss.phoenix.schedule.utilities;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;
@@ -137,5 +139,50 @@ public class ScheduleUtility {
         if( min < 10){strMinute = "0"+min.toString();}else{strMinute = min.toString();}
         if( sec < 10){strSecond = "0"+sec.toString();}else{strSecond = sec.toString();}
         return (strHour+":"+strMinute+":"+strSecond);
+    }
+
+    public static boolean validateDuration(String iDurationString){
+        if ( iDurationString.length() == 0){
+            return false;
+        }
+        String[] data = iDurationString.split(":|\\+");
+
+        int hours  = Integer.parseInt(data[0]);
+        int minutes = Integer.parseInt(data[1]);
+        int seconds = Integer.parseInt(data[2]);
+        if ( hours >= 24 || minutes >=60 || seconds >=60){
+            return false;
+        }
+        return true;
+    }
+
+    // iTime is start time
+    public static boolean validateTime(String iDate, Integer iTime){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        boolean status = false;
+        Date date = new Date();
+        try {
+            date = sdf.parse(iDate);
+        }
+        catch(Exception e){
+            //Failed
+            return status;
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.SECOND, iTime);
+        java.sql.Date currentDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        if ( currentDate.after(date)){
+            return status;
+        }
+
+        Date startTime = new Date(cal.getTime().getTime());
+        Date currUtilDateTime = new Date(Calendar.getInstance().getTime().getTime());
+
+        if ( startTime.after(currUtilDateTime)){
+            status = true;
+        }
+        return status;
     }
 }

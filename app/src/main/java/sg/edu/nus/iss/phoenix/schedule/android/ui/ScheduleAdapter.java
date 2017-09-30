@@ -55,10 +55,15 @@ public class ScheduleAdapter extends ArrayAdapter<ProgramSlot> {
         radioPSStartTime.setText("Start Time "+ ScheduleUtility.parseDuration(currentPS.getStartTime().intValue()), TextView.BufferType.NORMAL);
         setEditTextAttr(radioPSStartTime);
 
+        Button btnRadioProgram = (Button) listItemView.findViewById(R.id.maintain_schedule_radioProgram_button);
         Button btnSelectProducer = (Button) listItemView.findViewById(R.id.maintain_schedule_producer_button);
         Button btnSelectPresenter = (Button) listItemView.findViewById(R.id.maintain_schedule_presenter_button);
-        btnSelectPresenter.setVisibility(View.GONE);
-        btnSelectProducer.setVisibility(View.GONE);
+        btnRadioProgram.setText(currentPS.getRadioProgram());
+        btnSelectPresenter.setText(currentPS.getPresenter());
+        btnSelectProducer.setText(currentPS.getProducer());
+        setButtonsAttr(btnRadioProgram);
+        setButtonsAttr(btnSelectPresenter);
+        setButtonsAttr(btnSelectProducer);
 
         return listItemView;
     }
@@ -68,5 +73,13 @@ public class ScheduleAdapter extends ArrayAdapter<ProgramSlot> {
         iEditText.setClickable(false);
         iEditText.setFocusable(false);
         iEditText.setFocusableInTouchMode(false);
+    }
+
+    private void setButtonsAttr( Button iButton ){
+        iButton.setEnabled(false);
+        iButton.setKeyListener(null);
+        iButton.setClickable(false);
+        iButton.setFocusable(false);
+        iButton.setFocusableInTouchMode(false);
     }
 }

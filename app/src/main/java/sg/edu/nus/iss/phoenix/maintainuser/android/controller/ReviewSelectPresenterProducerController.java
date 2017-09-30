@@ -32,6 +32,7 @@ public class ReviewSelectPresenterProducerController {
      *
      * @param screen
      */
+
     public void onDisplayUserList(ReviewSelectPresenterProducerScreen screen){
         this.m_pListScreen = screen;
         if(this.userType == "producer")
@@ -41,9 +42,9 @@ public class ReviewSelectPresenterProducerController {
             new RetrievePresentersProducersDelegate(this).execute("allPresenters");
     }
 
-    public void startUseCase(String userType, ScheduledProgramScreen m_maintainScheduleScreen){
+    public void startUseCase(String userType, ScheduledProgramScreen maintainScheduleScreen){
         m_User = null;
-        this.m_maintainScheduleScreen = m_maintainScheduleScreen;
+        this.m_maintainScheduleScreen = maintainScheduleScreen;
         this.userType = userType;
         Intent intent = new Intent(MainController.getApp(), ReviewSelectPresenterProducerScreen.class);
         MainController.displayScreen(intent);

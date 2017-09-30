@@ -16,16 +16,30 @@ import sg.edu.nus.iss.phoenix.radioprogram.android.ui.MaintainProgramScreen;
 import sg.edu.nus.iss.phoenix.radioprogram.android.ui.ProgramListScreen;
 import sg.edu.nus.iss.phoenix.radioprogram.android.ui.ReviewSelectProgramScreen;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramScreen;
 
 public class ReviewSelectProgramController {
     // Tag for logging.
     private static final String TAG = ReviewSelectProgramController.class.getName();
 
     private ReviewSelectProgramScreen reviewSelectProgramScreen;
+    private ScheduledProgramScreen scheduledProgramScreen;
     private RadioProgram rpSelected = null;
+    private String rpName = null;
+
+    public void setRPName(String iRPName){
+        rpName = iRPName;
+    }
 
     public void startUseCase() {
         rpSelected = null;
+        Intent intent = new Intent(MainController.getApp(), ReviewSelectProgramScreen.class);
+        MainController.displayScreen(intent);
+    }
+
+    public void startUseCase(ScheduledProgramScreen iSchPrScreen) {
+        rpSelected = null;
+        scheduledProgramScreen = iSchPrScreen;
         Intent intent = new Intent(MainController.getApp(), ReviewSelectProgramScreen.class);
         MainController.displayScreen(intent);
     }
@@ -39,12 +53,15 @@ public class ReviewSelectProgramController {
         reviewSelectProgramScreen.showPrograms(radioPrograms);
     }
 
+    // Actually program selected from screen
     public void selectProgram(RadioProgram radioProgram) {
         rpSelected = radioProgram;
         Log.v(TAG, "Selected radio program: " + radioProgram.getRadioProgramName() + ".");
         // To call the base use case controller with the selected radio program.
         // At present, call the MainController instead.
-        ControlFactory.getMainController().selectedProgram(rpSelected);
+        ControlFactory.getScheduleController().setRadioProgram(rpSelected.getRadioProgramName());
+        scheduledProgramScreen.programRetrieved(rpSelected.getRadioProgramName());
+        reviewSelectProgramScreen.finish();
     }
 
     public void selectCancel() {

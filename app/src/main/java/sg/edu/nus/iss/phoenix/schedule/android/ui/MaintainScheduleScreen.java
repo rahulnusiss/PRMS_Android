@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,16 +44,16 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     private ScheduleAdapter mScheduleAdapter = null;
     private AnnualScheduleAdapter mAnnualScheduleAdapter = null;
     private WeeklyScheduleAdapter mWeeklyScheduleAdapter = null;
-    private AnnualScheduleList mAnnualScheduleList;
+    //private AnnualScheduleList mAnnualScheduleList;
     private ListView mListView;
     private ProgramSlot mSelectedPS = null;
     private boolean mWeekSelected = false;
     private boolean mYearSelected = false;
 
-    public void setAnnualScheduleList(AnnualScheduleList iAnnScList){
+    /*public void setAnnualScheduleList(AnnualScheduleList iAnnScList){
         mAnnualScheduleList = iAnnScList;
     }
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -253,13 +254,27 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 else { // Edited.
                     Log.v(TAG, "Modifying schedule " + mSelectedPS.getName()+ "...");
                     // Modifying in alert dialog
-                    alertDialogDisplay("Modify Schedule");
+                    Intent intent = new Intent(MainController.getApp(), ScheduledProgramScreen.class);
+                    //intent.putExtra("ModifySchedule", (Serializable)mSelectedPS );
+                    ControlFactory.getScheduleController().setProgramSlot(mSelectedPS);
+                    //Bundle bundle = new Bundle();
+                    //bundle.putSerializable("ModifySchedule", mSelectedPS);
+                    //intent.putExtras(bundle);
+                    MainController.displayScreen(intent);
+                    //alertDialogDisplay("Modify Schedule");
                 }
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_schedule_delete:
-                Log.v(TAG, "Deleting schedule " + mSelectedPS.getName() + "...");
-                ControlFactory.getScheduleController().selectDeleteSchedule(mSelectedPS);
+                if (mSelectedPS == null) { // Nothing selected from list.
+                    Log.v(TAG, "No schedule selected"  + "...");
+                    Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Please select a schedule to delete", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else {
+                    Log.v(TAG, "Deleting schedule " + mSelectedPS.getName() + "...");
+                    ControlFactory.getScheduleController().selectDeleteSchedule(mSelectedPS);
+                }
                 return true;
             // Respond to a click on the "Cancel" menu option
             case R.id.action_schedule_cancel:
@@ -353,7 +368,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                                 toast.show();
                             } else {
                                 mSelectedPS = tempPS;
-                                ControlFactory.getScheduleController().selectModifySchedule(mSelectedPS);
+                                ControlFactory.getScheduleController().selectModifySchedule(mSelectedPS,null) ; // null TBD
                             }
                         }
                         else{
@@ -378,7 +393,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     // Function to check overlap while modifying. It should not check with itself while modifying program slot.
     private boolean checkProgramSlotOverlap(ProgramSlot iProgramSlot){
         boolean status = false;
-        List<AnnualSchedule> annualSchedules = mAnnualScheduleList.retrieveAllAnnualSchedules();
+        List<AnnualSchedule> annualSchedules = ControlFactory.getScheduleController().getListAnnualSchedule().retrieveAllAnnualSchedules();
         for (int i = 0; i < annualSchedules.size(); i++) {
             AnnualSchedule annSch = annualSchedules.get(i);
             List<WeeklySchedule> weeks = annSch.retrieveAllWeeklySchedules();
@@ -409,13 +424,13 @@ public class MaintainScheduleScreen extends AppCompatActivity {
             return false;
         }
         // Check valid duration input
-        else if(!String.valueOf(inputDuration.getText()).matches(regexp)){
+        else if(!String.valueOf(inputDuration.getText()).matches(regexp) || !ScheduleUtility.validateDuration(inputDuration.getText().toString())){
             Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid Duration value", Toast.LENGTH_SHORT);
             toast.show();
             return false;
         }
 
-        else if(!String.valueOf(inputStartTime.getText()).matches(regexp)){
+        else if(!String.valueOf(inputStartTime.getText()).matches(regexp) || !ScheduleUtility.validateDuration(inputStartTime.getText().toString())){
             Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid Start Time value", Toast.LENGTH_SHORT);
             toast.show();
             return false;
@@ -430,7 +445,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
             mScheduleAdapter.add(iProgramSlots.get(i));
         }
 
-        List<AnnualSchedule> annualSchedules = mAnnualScheduleList.retrieveAllAnnualSchedules();
+        List<AnnualSchedule> annualSchedules = ControlFactory.getScheduleController().getListAnnualSchedule().retrieveAllAnnualSchedules();
         for (int i = 0; i < annualSchedules.size(); i++) {
             mAnnualScheduleAdapter.add(annualSchedules.get(i));
         }
@@ -438,7 +453,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
 
     private void displayAllProgramSlots(){
         mScheduleAdapter.clear();
-        List<AnnualSchedule> annualSchedules = mAnnualScheduleList.retrieveAllAnnualSchedules();
+        List<AnnualSchedule> annualSchedules = ControlFactory.getScheduleController().getListAnnualSchedule().retrieveAllAnnualSchedules();
         for (int i = 0; i < annualSchedules.size(); i++) {
             AnnualSchedule annSch = annualSchedules.get(i);
             List<WeeklySchedule> weeks = annSch.retrieveAllWeeklySchedules();
