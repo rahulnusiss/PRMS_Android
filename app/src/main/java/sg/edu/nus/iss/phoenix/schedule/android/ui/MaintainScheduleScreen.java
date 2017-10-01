@@ -44,16 +44,11 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     private ScheduleAdapter mScheduleAdapter = null;
     private AnnualScheduleAdapter mAnnualScheduleAdapter = null;
     private WeeklyScheduleAdapter mWeeklyScheduleAdapter = null;
-    //private AnnualScheduleList mAnnualScheduleList;
     private ListView mListView;
     private ProgramSlot mSelectedPS = null;
     private boolean mWeekSelected = false;
     private boolean mYearSelected = false;
 
-    /*public void setAnnualScheduleList(AnnualScheduleList iAnnScList){
-        mAnnualScheduleList = iAnnScList;
-    }
-*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,11 +226,6 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // If this is a new radioprogram, hide the "Delete" menu item.
-        /*if (mProgramSlot2Edit == null) {
-            MenuItem menuItem = menu.findItem(R.id.action_schedule_delete);
-            menuItem.setVisible(false);
-        }*/
         return true;
     }
 
@@ -292,148 +282,6 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                     ControlFactory.getScheduleController().selectCopySchedule(mSelectedPS);
                 }
                 return true;
-        }
-
-        return true;
-    }
-
-    private void alertDialogDisplay(String iTitle){
-
-        Context context = this.getApplicationContext();
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        // Creating alert Dialog with one Button
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MaintainScheduleScreen.this);
-        String s1 = "", s2 ="", s3 = "", s4 ="";
-
-        s1 = mSelectedPS.getName();
-        s2 = mSelectedPS.getDateOfProgram().toString();
-        s3 = mSelectedPS.getDuration().toString();
-        s4 = mSelectedPS.getStartTime().toString();
-
-        // Setting Dialog Title
-        alertDialog.setTitle(iTitle);
-
-        final EditText input1 = new EditText(MaintainScheduleScreen.this);
-        input1.setText(s1,TextView.BufferType.NORMAL);
-        final EditText input2 = new EditText(MaintainScheduleScreen.this);
-        input2.setText(s2,TextView.BufferType.NORMAL);
-        final EditText input3 = new EditText(MaintainScheduleScreen.this);
-        input3.setText(s3,TextView.BufferType.NORMAL);
-        final EditText input4 = new EditText(MaintainScheduleScreen.this);
-        input4.setText(s4,TextView.BufferType.NORMAL);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-
-        // Set edit text parameters
-        input1.setLayoutParams(lp);
-        input2.setLayoutParams(lp);
-        input3.setLayoutParams(lp);
-        input4.setLayoutParams(lp);
-
-        // Add edit texts to layout
-        layout.addView(input1);
-        layout.addView(input2);
-        layout.addView(input3);
-        layout.addView(input4);
-
-        // Set alert dialog view to layout
-        alertDialog.setView(layout);
-
-        // Setting Positive "Save" Button
-        alertDialog.setPositiveButton("SAVE",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int which) {
-                        // Write your code here to execute after dialog
-                        boolean isValid = validateModifyInput(input1, input2, input3, input4);
-                        if (isValid) {
-                            ProgramSlot tempPS = new ProgramSlot("");
-                            String psName = input1.getText().toString();
-                            tempPS.setName(psName);
-                            //mSelectedPS.setName(psName);
-                            String psDateofPr = input2.getText().toString();
-                            tempPS.setDateOfProgram(psDateofPr);
-                            //mSelectedPS.setDateOfProgram(psDateofPr);
-                            String psDuration = input3.getText().toString();
-                            tempPS.setDuration(psDuration);
-                            //mSelectedPS.setDuration(psDuration);
-                            String psStartTime = input4.getText().toString();
-                            tempPS.setStartTime(psStartTime);
-                            //mSelectedPS.setStartTime(psStartTime);
-
-                            // Check if slots overlap for current modifying schedule.
-                            if (checkProgramSlotOverlap(tempPS)) {
-                                Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
-                                toast.show();
-                            } else {
-                                mSelectedPS = tempPS;
-                                ControlFactory.getScheduleController().selectModifySchedule(mSelectedPS,null) ; // null TBD
-                            }
-                        }
-                        else{
-                            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Unable to modify program slot", Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-                    }
-                });
-
-        // Setting Negative "CANCEL" Button
-        alertDialog.setNegativeButton("CANCEL",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to execute after dialog
-                        dialog.cancel();
-                    }
-                });
-
-        alertDialog.show();
-    }
-
-    // Function to check overlap while modifying. It should not check with itself while modifying program slot.
-    private boolean checkProgramSlotOverlap(ProgramSlot iProgramSlot){
-        boolean status = false;
-        List<AnnualSchedule> annualSchedules = ControlFactory.getScheduleController().getListAnnualSchedule().retrieveAllAnnualSchedules();
-        for (int i = 0; i < annualSchedules.size(); i++) {
-            AnnualSchedule annSch = annualSchedules.get(i);
-            List<WeeklySchedule> weeks = annSch.retrieveAllWeeklySchedules();
-            int size2 = weeks.size();
-            for (int j = 0; j < size2; ++j) {
-                WeeklySchedule week = weeks.get(j);
-                List<ProgramSlot> slots = week.retrieveAllProgramSlot();
-                int size3 = slots.size();
-                for (int k = 0; k < size3; ++k) {
-                    if (mSelectedPS == slots.get(k)) {
-                        continue;
-                    }
-                    else{
-                        status = ScheduleUtility.isProgramSlotOverlap(iProgramSlot,slots.get(k));
-                        if(status){ return status;}
-                    }
-                }
-            }
-        }
-        return status;
-    }
-
-    private boolean validateModifyInput(EditText inputName, EditText inputDateOfPr, EditText inputDuration, EditText inputStartTime){
-        String regexp = "^\\d{2}:\\d{2}:\\d{2}$";
-        if( 0 == inputName.length() || 0 == inputDateOfPr.length() || 0 == inputDuration.length() || 0 == inputStartTime.length()){
-            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid one or more values", Toast.LENGTH_SHORT);
-            toast.show();
-            return false;
-        }
-        // Check valid duration input
-        else if(!String.valueOf(inputDuration.getText()).matches(regexp) || !ScheduleUtility.validateDuration(inputDuration.getText().toString())){
-            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid Duration value", Toast.LENGTH_SHORT);
-            toast.show();
-            return false;
-        }
-
-        else if(!String.valueOf(inputStartTime.getText()).matches(regexp) || !ScheduleUtility.validateDuration(inputStartTime.getText().toString())){
-            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid Start Time value", Toast.LENGTH_SHORT);
-            toast.show();
-            return false;
         }
 
         return true;

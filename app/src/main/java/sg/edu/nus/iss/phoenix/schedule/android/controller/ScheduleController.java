@@ -32,8 +32,6 @@ public class ScheduleController {
     private MaintainScheduleScreen maintainScheduleScreen;
 
     private ProgramSlot programSlot = null;
-    private WeeklySchedule weeklySchedule = null;
-    private AnnualSchedule annualSchedule = null;
     private AnnualScheduleList listAnnualSchedule = null;
     private String radioProgram = null;
 
@@ -67,54 +65,6 @@ public class ScheduleController {
         return listAnnualSchedule;
     }
 
-    public void onDisplayScheduleProgram(/*MaintainScheduleScreen*/){
-
-    }
-
-    public void presenterSelected(){
-
-    }
-
-    public void processModifyProgramSlot(){
-
-    }
-
-    public void processModifyTime(){
-
-    }
-
-    public void processPresenter(){
-
-    }
-
-    public void processProducer(){
-
-    }
-
-    public void producerSelected(){
-
-    }
-
-    public void programSelected(){
-
-    }
-
-    public void programSlotSelected(){
-
-    }
-
-    public void reviewSelectPresenterProducer(){
-
-    }
-
-    public void reviewSelectProgram(){
-
-    }
-
-    public void scheduleCopied(boolean iStatus){
-
-    }
-
     public void scheduleCreated(boolean iStatus){
         // Go back to Maintain Program screen with refreshed Schedules.
         String toastString = "";
@@ -141,10 +91,6 @@ public class ScheduleController {
         Toast toast = Toast.makeText(MainController.getApp(), toastString, Toast.LENGTH_SHORT);
         toast.show();
         startUseCase();
-    }
-
-    public void scheduledProgram(){
-
     }
 
     public void scheduleModified(boolean iStatus){
@@ -189,10 +135,6 @@ public class ScheduleController {
 
     public void selectModifySchedule(ProgramSlot iProgramSlotToEdit, ProgramSlot iNewProgramSlot){
         new UpdateScheduleDelegate(this).execute(iProgramSlotToEdit, iNewProgramSlot);
-    }
-
-    public void startCreateSchedule(ProgramSlot iProgramSlot){
-
     }
 
 }

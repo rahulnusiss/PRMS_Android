@@ -12,11 +12,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.radioprogram.android.ui.ReviewSelectProgramScreen;
+import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.maintainuser.entity.User;
+import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 public class ScheduledProgramScreen extends AppCompatActivity {
@@ -128,6 +132,7 @@ public class ScheduledProgramScreen extends AppCompatActivity {
             // Respond to a click on the "Cancel" menu option
             case R.id.action_schedule_cancel:
                 Log.v(TAG, "Canceling creating/editing schedule...");
+                this.finish();
                 ControlFactory.getScheduleController().selectCancelCreateEditSchedule();
                 return true;
         }
@@ -154,6 +159,12 @@ public class ScheduledProgramScreen extends AppCompatActivity {
 
         String psStartTime = radioPSStartTime.getText().toString();
         tempPS.setStartTime(psStartTime);
+
+        // Check if slots overlap for current modifying schedule.
+        if (checkProgramSlotOverlap(tempPS)) {
+            Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
+            toast.show();
+        }
 
         if ( tempPS.isProgramSlotAssigned(ControlFactory.getScheduleController().getListAnnualSchedule())){
             Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
@@ -225,5 +236,31 @@ public class ScheduledProgramScreen extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    // Function to check overlap while modifying. It should not check with itself while modifying program slot.
+    private boolean checkProgramSlotOverlap(ProgramSlot iProgramSlot){
+        boolean status = false;
+        List<AnnualSchedule> annualSchedules = ControlFactory.getScheduleController().getListAnnualSchedule().retrieveAllAnnualSchedules();
+        for (int i = 0; i < annualSchedules.size(); i++) {
+            AnnualSchedule annSch = annualSchedules.get(i);
+            List<WeeklySchedule> weeks = annSch.retrieveAllWeeklySchedules();
+            int size2 = weeks.size();
+            for (int j = 0; j < size2; ++j) {
+                WeeklySchedule week = weeks.get(j);
+                List<ProgramSlot> slots = week.retrieveAllProgramSlot();
+                int size3 = slots.size();
+                for (int k = 0; k < size3; ++k) {
+                    if (ps2edit == slots.get(k)) {
+                        continue;
+                    }
+                    else{
+                        status = ScheduleUtility.isProgramSlotOverlap(iProgramSlot,slots.get(k));
+                        if(status){ return status;}
+                    }
+                }
+            }
+        }
+        return status;
     }
 }
