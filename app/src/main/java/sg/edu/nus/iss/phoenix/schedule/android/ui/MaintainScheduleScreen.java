@@ -1,40 +1,28 @@
 package sg.edu.nus.iss.phoenix.schedule.android.ui;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
-import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
-import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 public class MaintainScheduleScreen extends AppCompatActivity {
 
@@ -233,55 +221,10 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
-            // Respond to a click on the "Save" menu option
-            case R.id.action_schedule_modify:
-                // Save radio program.
-                if (mSelectedPS == null) { // Nothing selected from list.
-                    Log.v(TAG, "No schedule selected"  + "...");
-                    Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Please select a schedule", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                else { // Edited.
-                    Log.v(TAG, "Modifying schedule " + mSelectedPS.getName()+ "...");
-                    // Modifying in alert dialog
-                    Intent intent = new Intent(MainController.getApp(), ScheduledProgramScreen.class);
-                    //intent.putExtra("ModifySchedule", (Serializable)mSelectedPS );
-                    ControlFactory.getScheduleController().setProgramSlot(mSelectedPS);
-                    //Bundle bundle = new Bundle();
-                    //bundle.putSerializable("ModifySchedule", mSelectedPS);
-                    //intent.putExtras(bundle);
-                    MainController.displayScreen(intent);
-                    //alertDialogDisplay("Modify Schedule");
-                }
-                return true;
-            // Respond to a click on the "Delete" menu option
-            case R.id.action_schedule_delete:
-                if (mSelectedPS == null) { // Nothing selected from list.
-                    Log.v(TAG, "No schedule selected"  + "...");
-                    Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Please select a schedule to delete", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                else {
-                    Log.v(TAG, "Deleting schedule " + mSelectedPS.getName() + "...");
-                    ControlFactory.getScheduleController().selectDeleteSchedule(mSelectedPS);
-                }
-                return true;
-            // Respond to a click on the "Cancel" menu option
-            case R.id.action_schedule_cancel:
-                Log.v(TAG, "Canceling creating/editing schedule...");
-                ControlFactory.getScheduleController().selectCancelCreateEditSchedule();
-                return true;
-            case R.id.action_schedule_copy:
-                Log.v(TAG, "Copying schedule...");
-                if (mSelectedPS == null) { // Nothing selected from list.
-                    Log.v(TAG, "No schedule selected"  + "...");
-                    Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Please select a schedule to copy", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                else {
-                    ControlFactory.getScheduleController().selectCopySchedule(mSelectedPS);
-                }
-                return true;
+            case R.id.action_schedule_view:
+                Intent intent = new Intent(MainController.getApp(), ScheduledProgramScreen.class);
+                ControlFactory.getScheduleController().setProgramSlot(mSelectedPS);
+                MainController.displayScreen(intent);
         }
 
         return true;

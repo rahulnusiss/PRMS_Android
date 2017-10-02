@@ -1,13 +1,9 @@
 package sg.edu.nus.iss.phoenix.schedule.entity;
 
-import android.util.Log;
-
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
+import java.sql.*;
 
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 /**
@@ -20,12 +16,12 @@ public class ProgramSlot {
     private String mName;
     private SimpleDateFormat mSDF = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-    private java.sql.Date mDateOfProgram;
+    private Date mDateOfProgram;
     private Integer mDuration;
     private String mPresenter;
     private String mProducer;
 
-    private Integer mStartTimeofDay; // in seconds
+    private Time mStartTimeofDay; // in seconds
 
     public void setID(int iID){
         mID = iID;
@@ -49,14 +45,14 @@ public class ProgramSlot {
     public ProgramSlot(String iName){
         this.mName = iName;
         mID = 0;
-        mDateOfProgram = new java.sql.Date(new Date().getTime());
+        mDateOfProgram = null;
         mDuration = 00;
-        mStartTimeofDay = 00;
+        mStartTimeofDay = null;
         mPresenter = "";
         mProducer = "";
     }
 
-    public ProgramSlot(String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime){
+    public ProgramSlot(String iName, Date iDateofProgram, Integer iDuration, Time iStartTime){
         this.mName = iName;
         mID = 0;
         mDateOfProgram = iDateofProgram;
@@ -66,7 +62,7 @@ public class ProgramSlot {
         mProducer = "";
     }
 
-    public ProgramSlot(String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime,
+    public ProgramSlot(String iName, Date iDateofProgram, Integer iDuration, Time iStartTime,
                        String iRadioProgram, String iPresenter, String iProducer){
         this.mName = iName;
         mID = 0;
@@ -77,7 +73,7 @@ public class ProgramSlot {
         mProducer = iProducer;
     }
 
-    public ProgramSlot(int iID, String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime,
+    public ProgramSlot(int iID, String iName, Date iDateofProgram, Integer iDuration, Time iStartTime,
                        String iPresenter, String iProducer){
         this.mName = iName;
         mID = iID;
@@ -95,17 +91,11 @@ public class ProgramSlot {
         return mName;
     }
 
-    public java.sql.Date getDateOfProgram(){
+    public Date getDateOfProgram(){
         return mDateOfProgram;
     }
-    public void setDateOfProgram( String iDateofProgram) {
-        try {
-            Date date = mSDF.parse(iDateofProgram);
-            mDateOfProgram = new java.sql.Date(date.getTime());
-            //mDateOfProgram = mSDF.parse(iDateofProgram);
-        } catch (Exception e) {
-            //print e.getMessage
-        }
+    public void setDateOfProgram(Date iDateofProgram) {
+        mDateOfProgram = iDateofProgram;
     }
 
     public Integer getDuration(){
@@ -116,11 +106,11 @@ public class ProgramSlot {
     }
 
 
-    public Integer getStartTime(){
+    public Time getStartTime(){
         return mStartTimeofDay;
     }
-    public void setStartTime( String iStartTime){
-        mStartTimeofDay = ScheduleUtility.parseDuration(iStartTime);
+    public void setStartTime( Time iStartTime){
+        mStartTimeofDay = iStartTime;
     }
 
     public boolean isProgramSlotAssigned(AnnualScheduleList iAnnualScheduleList){

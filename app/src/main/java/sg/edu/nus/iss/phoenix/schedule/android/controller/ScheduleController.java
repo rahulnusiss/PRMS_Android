@@ -6,19 +6,15 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.CreateScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.DeleteScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.UpdateScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.ui.MaintainScheduleScreen;
-import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
-import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
+import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramScreen;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
-import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 /**
@@ -30,6 +26,7 @@ public class ScheduleController {
     private static final String TAG = ScheduleController.class.getName();
 
     private MaintainScheduleScreen maintainScheduleScreen;
+    private ScheduledProgramScreen scheduleScreen;
 
     private ProgramSlot programSlot = null;
     private AnnualScheduleList listAnnualSchedule = null;
@@ -58,6 +55,15 @@ public class ScheduleController {
     public void onDisplayScheduleList(MaintainScheduleScreen maintainScheduleScreen){
         this.maintainScheduleScreen = maintainScheduleScreen;
         new RetrieveScheduleDelegate(this).execute("all");
+
+    }
+
+    public void onDisplaySchedule(ScheduledProgramScreen scheduleScreen){
+        this.scheduleScreen = scheduleScreen;
+        if (programSlot == null)
+            scheduleScreen.createSchedule();
+        else
+            scheduleScreen.editSchedule(programSlot);
 
     }
 

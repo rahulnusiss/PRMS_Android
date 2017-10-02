@@ -13,10 +13,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ProgramController;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
-import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
@@ -54,8 +52,8 @@ public class UpdateScheduleDelegate extends AsyncTask<ProgramSlot, Void, Boolean
             json.put("id", params[1].getID());
             json.put("programName", params[1].getName());
             json.put("dateofProgram", params[1].getDateOfProgram().toString());
-            json.put("duration", ScheduleUtility.durationToTime(params[1].getDuration()));
-            json.put("startTime", ScheduleUtility.durationToTime(params[1].getStartTime()));
+            json.put("duration", params[1].getDuration());
+            json.put("startTime", params[1].getStartTime());
             json.put("presenterId", params[1].getPresenter());
             json.put("producerId", params[1].getProducer());
 

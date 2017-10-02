@@ -3,20 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_schedule_cancel"
-        android:title="@string/action_cancel"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_schedule_copy"
-        android:title="@string/action_copy"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_schedule_modify"
-        android:title="@string/action_modify"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_schedule_delete"
-        android:title="@string/action_delete"
+        android:id="@+id/action_schedule_view"
+        android:title="View"
         app:showAsAction="always" />
 
     <item android:id="@+id/spinner_year"

@@ -90,21 +90,21 @@ public class ScheduleUtility {
     public static boolean isProgramSlotOverlap(ProgramSlot iSlot, ProgramSlot iProgramSlot){
 
         java.sql.Date PSDate = iProgramSlot.getDateOfProgram();
-        int PSStartTime = iProgramSlot.getStartTime().intValue();
+        java.sql.Time PSTime = iProgramSlot.getStartTime();
         int PSDuration = iProgramSlot.getDuration().intValue();
         Calendar cal = Calendar.getInstance();
 
-        cal.setTime(PSDate); // iPSDate  is start date
-        cal.add(Calendar.SECOND, PSStartTime); // Add start time to the day: Start time
+        cal.set(PSDate.getYear(), PSDate.getMonth(), PSDate.getDay(), PSTime.getHours(), PSTime.getMinutes());
         Date psDateStart = cal.getTime();
-        cal.add(Calendar.SECOND, PSDuration); // Add duration to the start time: End time
+        cal.add(Calendar.MINUTE, PSDuration);
         Date psDateEnd = cal.getTime();
 
         java.sql.Date dateStart = iSlot.getDateOfProgram();
-        cal.setTime(dateStart);
-        cal.add(Calendar.SECOND, iSlot.getStartTime().intValue());
+        java.sql.Time slotTime = iSlot.getStartTime();
+        int slotDuration = iSlot.getDuration().intValue();
+        cal.set(dateStart.getYear(), dateStart.getMonth(), dateStart.getDay(), slotTime.getHours(), slotTime.getMinutes());
         Date slotDateStart = cal.getTime();
-        cal.add(Calendar.SECOND,iSlot.getDuration().intValue());
+        cal.add(Calendar.MINUTE, slotDuration);
         Date slotDateEnd = cal.getTime();
         if ( overlap(slotDateStart, slotDateEnd, psDateStart, psDateEnd)){
             return true;
@@ -117,15 +117,17 @@ public class ScheduleUtility {
     }
 
     public static Integer parseDuration(String iDurationString){
-        if ( iDurationString.length() == 0){
-            return 0;
-        }
-        String[] data = iDurationString.split(":|\\+");
+//        if ( iDurationString.length() == 0){
+//            return 0;
+//        }
+//        String[] data = iDurationString.split(":|\\+");
+//
+//        int hours  = Integer.parseInt(data[0]);
+//        int minutes = Integer.parseInt(data[1]);
+//        int seconds = Integer.parseInt(data[2]);
+//        return (seconds + 60 * minutes + 3600 * hours);
 
-        int hours  = Integer.parseInt(data[0]);
-        int minutes = Integer.parseInt(data[1]);
-        int seconds = Integer.parseInt(data[2]);
-        return (seconds + 60 * minutes + 3600 * hours);
+        return Integer.parseInt(iDurationString);
     }
 
     public static String parseDuration(Integer iDurationInt){
@@ -140,6 +142,20 @@ public class ScheduleUtility {
         if( min < 10){strMinute = "0"+min.toString();}else{strMinute = min.toString();}
         if( sec < 10){strSecond = "0"+sec.toString();}else{strSecond = sec.toString();}
         return (strHour+":"+strMinute+":"+strSecond);
+    }
+
+    public static String parseDurationFromMin(Integer iDurationInt){
+        int hour = iDurationInt.intValue()/60;
+        Integer hr = new Integer(hour);
+        int rem = iDurationInt.intValue()%60;
+        Integer min = new Integer(rem/60);
+
+
+        String strHour = "", strMinute = "", strSecond = "";
+        if( hr < 10){strHour = "0"+hr.toString();}else{strHour = hr.toString();}
+        if( min < 10){strMinute = "0"+min.toString();}else{strMinute = min.toString();}
+
+        return (strHour+":"+strMinute+":00");
     }
 
     public static Time durationToTime(Integer iDuration){

@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,14 +20,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import javax.xml.datatype.Duration;
-
-import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
-
-import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ReviewSelectProgramController;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ReviewSelectScheduledProgramController;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+
+import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
 /**
  * Created by rahul on 9/20/2017.
@@ -39,6 +35,7 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
     // Tag for logging
     private static final String TAG = RetrieveScheduleDelegate.class.getName();
     private SimpleDateFormat mSDF = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+    private SimpleDateFormat tSDF = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
 
     private ScheduleController mScheduleController;
     private ReviewSelectScheduledProgramController mReviewSelectScheduledProgramController;
@@ -127,6 +124,7 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
                     String producer = psJson.getString("producerId");
                     //Converting to Date format
                     Date dateOfPrTime = null;
+                    Date sTime = null;
                     Integer startTimePr = getDuration(startTime);
 
                     try {
@@ -136,7 +134,16 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
                         Log.v(TAG, "Date Parsing exception: " + e.getMessage());
                     }
                     java.sql.Date sqlDateofProgram = new java.sql.Date(dateOfPrTime.getTime());
-                    programSlots.add(new ProgramSlot(id, programName, sqlDateofProgram, prDuration, startTimePr,presenter,producer));//radioProgram,presenter,producer));
+
+                    try {
+                        sTime = tSDF.parse(startTime);
+                    }
+                    catch(Exception e){
+                        Log.v(TAG, "Time Parsing exception: " + e.getMessage());
+                    }
+                    java.sql.Time sqlTimeofProgram = new java.sql.Time(sTime.getTime());
+
+                    programSlots.add(new ProgramSlot(id, programName, sqlDateofProgram, prDuration, sqlTimeofProgram,presenter,producer));//radioProgram,presenter,producer));
                 }
             } catch (JSONException e) {
                 Log.v(TAG, e.getMessage());

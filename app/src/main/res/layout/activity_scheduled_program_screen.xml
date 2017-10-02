@@ -2,57 +2,65 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".radioprogram.android.ui.MaintainProgramScreen">
 
-  <!-- <TextView
-            android:id="@+id/maintain_schedule_spinner_year"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Name"
-            tools:text="Name" /> -->
-    <!--<EditText
-        android:id="@+id/maintain_schedule_name_text_view"
+    <TextView
+        android:id="@+id/maintain_schedule_dateOfPr_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Schedule Name" /> -->
-    <!--  <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_below="@id/maintain_schedule_name_text_view"
-          android:text="Description"
-          tools:text="Description" /> -->
-
-      <EditText
-          android:id="@+id/maintain_schedule_dateOfPr_text_view"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          tools:text="one" />
-     <!-- <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_below="@id/maintain_schedule_desc_text_view"
-          android:text="Duration"
-          tools:text="Duration" /> -->
-
-      <EditText
-          android:id="@+id/maintain_schedule_duration_text_view"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_below="@id/maintain_schedule_dateOfPr_text_view"
-          android:maxLength="8"
-          android:text="00:30:00"
-          tools:text="00:30:00" />
+        android:text="Date of program"
+        tools:text="Date of program" />
 
     <EditText
+        android:id="@+id/maintain_schedule_dateOfPr_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:hint="YYYY/MM/DD" />
+
+    <TextView
+        android:id="@+id/maintain_schedule_duration_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Duration"
+        tools:text="Duration (minutes)" />
+
+    <EditText
+        android:id="@+id/maintain_schedule_duration_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text=""
+        tools:text="" />
+
+    <TextView
         android:id="@+id/maintain_schedule_starttime_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/maintain_schedule_duration_text_view"
-        tools:text="Schedule Name" />
+        android:text="Start time"
+        tools:text="Start time" />
+
+    <EditText
+        android:id="@+id/maintain_schedule_starttime_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="HH:MM" />
+
+    <TextView
+        android:id="@+id/maintain_schedule_endtime_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="End time"
+        tools:text="End time" />
+
+    <EditText
+        android:id="@+id/maintain_schedule_endtime_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="HH:MM" />
 
     <Button
         android:id="@+id/maintain_schedule_producer_button"
@@ -61,18 +69,18 @@
         android:layout_below="@id/maintain_schedule_starttime_text_view"
         android:text="Select Producer"
         tools:text="Select Producer" />
+
     <Button
         android:id="@+id/maintain_schedule_presenter_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/maintain_schedule_producer_button"
         android:text="Select Presenter"
         tools:text="Select Presenter" />
+
     <Button
-      android:id="@+id/maintain_schedule_radioProgram_button"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@id/maintain_schedule_presenter_button"
-      android:text="Select RadioPr"
-      tools:text="Select RadioPr" />
-    </LinearLayout>
+        android:id="@+id/maintain_schedule_radioProgram_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Radio Program"
+        tools:text="Select Radio Program" />
+</LinearLayout>

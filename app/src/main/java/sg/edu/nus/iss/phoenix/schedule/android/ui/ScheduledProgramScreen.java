@@ -1,25 +1,31 @@
 package sg.edu.nus.iss.phoenix.schedule.android.ui;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
-import sg.edu.nus.iss.phoenix.radioprogram.android.ui.ReviewSelectProgramScreen;
+import sg.edu.nus.iss.phoenix.maintainuser.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
-import sg.edu.nus.iss.phoenix.maintainuser.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
@@ -31,13 +37,17 @@ public class ScheduledProgramScreen extends AppCompatActivity {
     private EditText radioPSDateofPr;
     private EditText radioPSDuration;
     private EditText radioPSStartTime;
+    private EditText radioPSEndTime;
     private Button btnSelectProducer;
     private Button btnSelectPresenter;
     private Button btnRadioProgram;
     private ProgramSlot ps2edit = null;
     private User selectedUser = null;
     private boolean isCreate = false;
-    KeyListener mRPNameEditTextKeyListener = null;
+    private KeyListener mRPNameEditTextKeyListener = null;
+    private Calendar dateCalendar = Calendar.getInstance();
+    private Calendar startTimeCalendar = Calendar.getInstance();
+    private Calendar endTimeCalendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,29 +60,83 @@ public class ScheduledProgramScreen extends AppCompatActivity {
 
         // Find all relevant views that we will need to read user input from
         //radioPSName = (EditText) findViewById(R.id.maintain_schedule_name_text_view);
-        radioPSDateofPr = (EditText) findViewById(R.id.maintain_schedule_dateOfPr_text_view);
-        radioPSDuration = (EditText) findViewById(R.id.maintain_schedule_duration_text_view);
-        radioPSStartTime = (EditText) findViewById(R.id.maintain_schedule_starttime_text_view);
+        radioPSDateofPr = (EditText) findViewById(R.id.maintain_schedule_dateOfPr_text_field);
+        radioPSDuration = (EditText) findViewById(R.id.maintain_schedule_duration_text_field);
+        radioPSStartTime = (EditText) findViewById(R.id.maintain_schedule_starttime_text_field);
+        radioPSEndTime = (EditText) findViewById(R.id.maintain_schedule_endtime_text_field);
         btnSelectProducer = (Button) findViewById(R.id.maintain_schedule_producer_button);
         btnSelectPresenter = (Button) findViewById(R.id.maintain_schedule_presenter_button);
         btnRadioProgram = (Button) findViewById(R.id.maintain_schedule_radioProgram_button);
 
-        if ( null != ps2edit){
-            //radioPSName.setText(ps2edit.getName());
-            radioPSDateofPr.setText(ps2edit.getDateOfProgram().toString());
-            radioPSStartTime.setText(ScheduleUtility.parseDuration(ps2edit.getStartTime()));
-            radioPSDuration.setText(ScheduleUtility.parseDuration(ps2edit.getDuration()));
-            btnSelectProducer.setText(ps2edit.getProducer());
-            btnSelectPresenter.setText(ps2edit.getPresenter());
-            btnRadioProgram.setText(ps2edit.getName());
-            btnRadioProgram.setEnabled(false);
-            // Reset controllers program slot
-            ControlFactory.getScheduleController().setProgramSlot(null);
-        }
-        else{
-            ps2edit = new ProgramSlot("");
-            isCreate = true;
-        }
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+
+                dateCalendar.set(Calendar.YEAR, year);
+                dateCalendar.set(Calendar.MONTH, monthOfYear);
+                dateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                radioPSDateofPr.setText(getDate(year, monthOfYear, dayOfMonth), TextView.BufferType.EDITABLE);
+            }
+
+        };
+
+        radioPSDateofPr.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                new DatePickerDialog(ScheduledProgramScreen.this, date, dateCalendar
+                        .get(Calendar.YEAR), dateCalendar.get(Calendar.MONTH),
+                        dateCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                startTimeCalendar.set(Calendar.MINUTE, minute);
+                radioPSStartTime.setText(getTime(hourOfDay, minute), TextView.BufferType.EDITABLE);
+            }
+        };
+
+        radioPSStartTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                new TimePickerDialog(ScheduledProgramScreen.this, time, startTimeCalendar
+                        .get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), false).show();
+            }
+        });
+
+        final TimePickerDialog.OnTimeSetListener time1 = new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                endTimeCalendar.set(Calendar.MINUTE, minute);
+                radioPSEndTime.setText(getTime(hourOfDay, minute), TextView.BufferType.EDITABLE);
+
+                long diff = endTimeCalendar.getTimeInMillis() - startTimeCalendar.getTimeInMillis();
+                long diffMinutes = diff / (60 * 1000);
+
+                radioPSDuration.setText(String.format("%d", diffMinutes), TextView.BufferType.EDITABLE);
+            }
+        };
+
+        radioPSEndTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                new TimePickerDialog(ScheduledProgramScreen.this, time1, endTimeCalendar
+                        .get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), false).show();
+            }
+        });
 
         btnSelectProducer.setOnClickListener(new View.OnClickListener() {
             // The code in this method will be executed when the numbers category is clicked on.
@@ -102,16 +166,37 @@ public class ScheduledProgramScreen extends AppCompatActivity {
 
     }
 
-    /**
-     * This method is called after invalidateOptionsMenu(), so that the
-     * menu can be updated (some menu items can be hidden or made visible).
-     */
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        ControlFactory.getScheduleController().onDisplaySchedule(this);
+    }
+
+    private String getDate(int year, int month, int day){
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+        String format = "yyyy/MM/dd";
+        return new SimpleDateFormat(format).format(cal.getTime());
+    }
+
+    private String getTime(int hour, int minute){
+        Calendar cal = Calendar.getInstance();
+        cal.set(1, 1, 1, hour, minute);
+        String format = "HH:mm";
+        return new SimpleDateFormat(format).format(cal.getTime());
+    }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        MenuItem menuItem = menu.findItem(R.id.action_delete);
-        menuItem.setVisible(false);
+        // If this is a new radioprogram, hide the "Delete" menu item.
+        if (this.ps2edit == null) {
+            MenuItem menuItem = menu.findItem(R.id.action_delete);
+            menuItem.setVisible(false);
 
+            menuItem = menu.findItem(R.id.action_copy);
+            menuItem.setVisible(false);
+        }
         return true;
     }
 
@@ -119,95 +204,6 @@ public class ScheduledProgramScreen extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // User clicked on a menu option in the app bar overflow menu
-        switch (item.getItemId()) {
-            // Respond to a click on the "Save" menu option
-            case R.id.action_save:
-                // Save radio program.
-                boolean isSaveOk = saveProgramSlot();
-                //Log.v(TAG, "No schedule selected"  + "...");
-                return isSaveOk;
-            // Respond to a click on the "Delete" menu option
-            case R.id.action_schedule_delete:
-                this.finish();
-                return true;
-            // Respond to a click on the "Cancel" menu option
-            case R.id.action_schedule_cancel:
-                Log.v(TAG, "Canceling creating/editing schedule...");
-                this.finish();
-                ControlFactory.getScheduleController().selectCancelCreateEditSchedule();
-                return true;
-        }
-
-        return true;
-    }
-
-    private boolean saveProgramSlot(){
-
-        boolean isValidValues = validateFormat();
-        if ( !isValidValues ){
-            return false;
-        }
-
-        ProgramSlot tempPS = new ProgramSlot("");
-        String psName = btnRadioProgram.getText().toString();
-        tempPS.setName(psName);
-
-        String psDateofPr = radioPSDateofPr.getText().toString();
-        tempPS.setDateOfProgram(psDateofPr);
-
-        String psDuration = radioPSDuration.getText().toString();
-        tempPS.setDuration(psDuration);
-
-        String psStartTime = radioPSStartTime.getText().toString();
-        tempPS.setStartTime(psStartTime);
-
-        String psPresenter = btnSelectPresenter.getText().toString();
-        tempPS.setPresenter(psPresenter);
-
-        String psProducer = btnSelectProducer.getText().toString();
-        tempPS.setProducer(psProducer);
-
-        // Check if slots overlap for current modifying schedule.
-        if (checkProgramSlotOverlap(tempPS)) {
-            Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-
-        if ( tempPS.isProgramSlotAssigned(ControlFactory.getScheduleController().getListAnnualSchedule())){
-            Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
-            toast.show();
-            isValidValues = false;
-        }
-        else {
-            // If intent Modify recieved null then create
-            if( isCreate ) {
-                tempPS.setName(ps2edit.getName());
-                tempPS.setPresenter(ps2edit.getPresenter());
-                tempPS.setProducer(ps2edit.getProducer());
-                ControlFactory.getScheduleController().selectCreateSchedule(tempPS);
-                isCreate = false;
-            }
-            else{ // If ps2EDIT RETRIEVED then modify
-                tempPS.setID(ps2edit.getID());
-                ControlFactory.getScheduleController().selectModifySchedule(ps2edit, tempPS);
-            }
-        }
-
-        return isValidValues;
-    }
-
-    public void createSchedule() {
-        this.ps2edit = null;
-        btnRadioProgram.setText("", TextView.BufferType.EDITABLE);
-        radioPSDateofPr.setText("", TextView.BufferType.EDITABLE);
-        radioPSDuration.setText("", TextView.BufferType.EDITABLE);
-        radioPSStartTime.setText("", TextView.BufferType.EDITABLE);
-        radioPSDateofPr.setKeyListener(mRPNameEditTextKeyListener);
     }
 
     public void programRetrieved(String iPrName) {
@@ -236,23 +232,23 @@ public class ScheduledProgramScreen extends AppCompatActivity {
             return false;
         }
         // Check valid duration input
-        else if(!String.valueOf(radioPSDuration.getText()).matches(regexp) || !ScheduleUtility.validateDuration(radioPSDuration.getText().toString())){
-            Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Invalid Duration value", Toast.LENGTH_SHORT);
-            toast.show();
-            return false;
-        }
+//        else if(!String.valueOf(radioPSDuration.getText()).matches(regexp) || !ScheduleUtility.validateDuration(radioPSDuration.getText().toString())){
+//            Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Invalid Duration value", Toast.LENGTH_SHORT);
+//            toast.show();
+//            return false;
+//        }
 
-        else if(!String.valueOf(radioPSStartTime.getText()).matches(regexp) || !ScheduleUtility.validateDuration(radioPSStartTime.getText().toString())){
+        else if(this.endTimeCalendar.getTimeInMillis() - this.startTimeCalendar.getTimeInMillis() <= 0){
             Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Invalid Start Time value", Toast.LENGTH_SHORT);
             toast.show();
             return false;
         }
 
-        else if(!ScheduleUtility.validateTime(radioPSDateofPr.getText().toString(),ScheduleUtility.parseDuration(radioPSStartTime.getText().toString()))){
-            Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Date and time entered is invalid, should be after current time.", Toast.LENGTH_SHORT);
-            toast.show();
-            return false;
-        }
+//        else if(!ScheduleUtility.validateTime(radioPSDateofPr.getText().toString(),ScheduleUtility.parseDuration(radioPSStartTime.getText().toString()))){
+//            Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Date and time entered is invalid, should be after current time.", Toast.LENGTH_SHORT);
+//            toast.show();
+//            return false;
+//        }
 
         return true;
     }
@@ -281,5 +277,138 @@ public class ScheduledProgramScreen extends AppCompatActivity {
             }
         }
         return status;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.v(TAG, "Canceling creating/editing radio program...");
+        ControlFactory.getUserController().selectCancelCreateEditProgram();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // User clicked on a menu option in the app bar overflow menu
+        switch (item.getItemId()) {
+            // Respond to a click on the "Save" menu option
+            case R.id.action_save:
+                selectSaveSchedule();
+
+                return true;
+            case R.id.action_delete:
+                selectDeleteSchedule();
+
+                return true;
+            case R.id.action_cancel:
+                Log.v(TAG, "Canceling creating/editing schedule...");
+                ControlFactory.getScheduleController().selectCancelCreateEditSchedule();
+                return true;
+            case R.id.action_copy:
+                selectCopySchedule();
+
+        }
+
+        return true;
+    }
+
+    private void selectCopySchedule() {
+        //                Log.v(TAG, "Copying schedule...");
+//                if (mSelectedPS == null) { // Nothing selected from list.
+//                    Log.v(TAG, "No schedule selected"  + "...");
+//                    Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Please select a schedule to copy", Toast.LENGTH_SHORT);
+//                    toast.show();
+//                }
+//                else {
+//                    ControlFactory.getScheduleController().selectCopySchedule(mSelectedPS);
+//                }
+
+//             Respond to a click on the "Delete" menu option
+//            case R.id.action_schedule_delete:
+//                this.finish();
+//                return true;
+//            // Respond to a click on the "Cancel" menu option
+//            case R.id.action_schedule_cancel:
+//                Log.v(TAG, "Canceling creating/editing schedule...");
+//                this.finish();
+//                ControlFactory.getScheduleController().selectCancelCreateEditSchedule();
+//                return true;
+    }
+
+    private void selectDeleteSchedule() {
+        ControlFactory.getScheduleController().selectDeleteSchedule(this.ps2edit);
+    }
+
+    private void selectSaveSchedule() {
+        boolean isValidValues = validateFormat();
+        if ( !isValidValues ){
+            return;
+        }
+
+        ProgramSlot tempPS = new ProgramSlot("");
+        String psName = btnRadioProgram.getText().toString();
+        tempPS.setName(psName);
+
+        String psDateofPr = radioPSDateofPr.getText().toString();
+        tempPS.setDateOfProgram(new java.sql.Date(dateCalendar.getTimeInMillis()));
+
+        String psDuration = radioPSDuration.getText().toString();
+        tempPS.setDuration(psDuration);
+
+        String psStartTime = radioPSStartTime.getText().toString();
+        tempPS.setStartTime(new java.sql.Time(startTimeCalendar.getTimeInMillis()));
+
+        String psPresenter = btnSelectPresenter.getText().toString();
+        tempPS.setPresenter(psPresenter);
+
+        String psProducer = btnSelectProducer.getText().toString();
+        tempPS.setProducer(psProducer);
+
+        // Check if slots overlap for current modifying schedule.
+        if (checkProgramSlotOverlap(tempPS)) {
+            Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        if ( tempPS.isProgramSlotAssigned(ControlFactory.getScheduleController().getListAnnualSchedule())){
+            Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
+            toast.show();
+            isValidValues = false;
+        }
+        else {
+            // If intent Modify recieved null then create
+            if( this.ps2edit == null ) {
+                tempPS.setName(ps2edit.getName());
+                tempPS.setPresenter(ps2edit.getPresenter());
+                tempPS.setProducer(ps2edit.getProducer());
+                ControlFactory.getScheduleController().selectCreateSchedule(tempPS);
+                isCreate = false;
+            }
+            else{ // If ps2EDIT RETRIEVED then modify
+                tempPS.setID(ps2edit.getID());
+                ControlFactory.getScheduleController().selectModifySchedule(ps2edit, tempPS);
+            }
+        }
+    }
+
+    public void createSchedule() {
+        ps2edit = new ProgramSlot("");
+        isCreate = true;
+        btnRadioProgram.setText("", TextView.BufferType.EDITABLE);
+        radioPSDateofPr.setText("", TextView.BufferType.EDITABLE);
+        radioPSDuration.setText("", TextView.BufferType.EDITABLE);
+        radioPSStartTime.setText("", TextView.BufferType.EDITABLE);
+        radioPSDateofPr.setKeyListener(mRPNameEditTextKeyListener);
+    }
+
+    public void editSchedule(ProgramSlot slot) {
+        //radioPSName.setText(ps2edit.getName());
+        radioPSDateofPr.setText(slot.getDateOfProgram().toString());
+        radioPSStartTime.setText(slot.getStartTime().toString());
+//            radioPSDuration.setText(ps2edit.getDuration());
+        btnSelectProducer.setText(slot.getProducer());
+        btnSelectPresenter.setText(slot.getPresenter());
+        btnRadioProgram.setText(slot.getName());
+        btnRadioProgram.setEnabled(false);
+        // Reset controllers program slot
+        ControlFactory.getScheduleController().setProgramSlot(null);
     }
 }
