@@ -16,6 +16,7 @@ import java.net.URL;
 import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ProgramController;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
@@ -50,22 +51,14 @@ public class UpdateScheduleDelegate extends AsyncTask<ProgramSlot, Void, Boolean
         JSONObject json = new JSONObject();
         try {
             // Old
-            json.put("name", params[0].getName());
-            json.put("dateofProgram", params[0].getDateOfProgram().toString());
-            json.put("duration", params[0].getDuration().intValue());
-            json.put("startTime", params[0].getStartTime().toString());
-            json.put("radioProgram", params[0].getRadioProgram());
-            json.put("presenter", params[0].getPresenter());
-            json.put("producer", params[0].getProducer());
+            json.put("id", params[1].getID());
+            json.put("programName", params[1].getName());
+            json.put("dateofProgram", params[1].getDateOfProgram().toString());
+            json.put("duration", ScheduleUtility.durationToTime(params[1].getDuration()));
+            json.put("startTime", ScheduleUtility.durationToTime(params[1].getStartTime()));
+            json.put("presenterId", params[1].getPresenter());
+            json.put("producerId", params[1].getProducer());
 
-            //Modified
-            json.put("modifiedName", params[1].getName());
-            json.put("modifiedDateofProgram", params[1].getDateOfProgram().toString());
-            json.put("modifiedDuration", params[1].getDuration().intValue());
-            json.put("modifiedStartTime", params[1].getStartTime().toString());
-            json.put("modifiedRadioProgram", params[1].getRadioProgram());
-            json.put("modifiedPresenter", params[1].getPresenter());
-            json.put("modifiedProducer", params[1].getProducer());
         } catch (JSONException e) {
             Log.v(TAG, e.getMessage());
         }

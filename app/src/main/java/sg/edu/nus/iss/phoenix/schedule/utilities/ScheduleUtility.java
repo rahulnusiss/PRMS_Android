@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.phoenix.schedule.utilities;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -139,6 +140,10 @@ public class ScheduleUtility {
         if( min < 10){strMinute = "0"+min.toString();}else{strMinute = min.toString();}
         if( sec < 10){strSecond = "0"+sec.toString();}else{strSecond = sec.toString();}
         return (strHour+":"+strMinute+":"+strSecond);
+    }
+
+    public static Time durationToTime(Integer iDuration){
+        return Time.valueOf(ScheduleUtility.parseDuration(iDuration));
     }
 
     public static boolean validateDuration(String iDurationString){

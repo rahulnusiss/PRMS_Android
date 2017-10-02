@@ -75,14 +75,28 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
 
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
-            if (scanner.hasNext()) jsonResp = scanner.next();
+            if (scanner.hasNext())
+            {
+                try {
+                    jsonResp = scanner.next();
+                }
+                finally{
+                    // Do Nothing
+                    return jsonResp;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (urlConnection != null) urlConnection.disconnect();
         }
-
-        return jsonResp;
+        catch(Exception e){
+            e.printStackTrace();
+            return jsonResp;
+        }
+        finally {
+            if (urlConnection != null) urlConnection.disconnect();
+            return jsonResp;
+        }
+        //return jsonResp;
     }
 
     @Override
@@ -102,14 +116,15 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
 
                     // Convert to Date in try catch
 
+                    int id = psJson.getInt("id");
                     String dateofProgram = psJson.getString("dateofProgram");
                     String duration = psJson.getString("duration");
                     Integer prDuration = getDuration(duration);
                     String programName = psJson.getString("programName");
                     String startTime = psJson.getString("startTime");
                     //String radioProgram = psJson.getString("radioProgram");
-                    //String presenter = psJson.getString("presenter");
-                    //String producer = psJson.getString("producer");
+                    String presenter = psJson.getString("presenterId");
+                    String producer = psJson.getString("producerId");
                     //Converting to Date format
                     Date dateOfPrTime = null;
                     Integer startTimePr = getDuration(startTime);
@@ -121,7 +136,7 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
                         Log.v(TAG, "Date Parsing exception: " + e.getMessage());
                     }
                     java.sql.Date sqlDateofProgram = new java.sql.Date(dateOfPrTime.getTime());
-                    programSlots.add(new ProgramSlot(programName, sqlDateofProgram, prDuration, startTimePr,"","",""));//radioProgram,presenter,producer));
+                    programSlots.add(new ProgramSlot(id, programName, sqlDateofProgram, prDuration, startTimePr,presenter,producer));//radioProgram,presenter,producer));
                 }
             } catch (JSONException e) {
                 Log.v(TAG, e.getMessage());

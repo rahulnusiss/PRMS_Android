@@ -15,9 +15,10 @@ import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
  */
 
 public class ProgramSlot {
+
+    private int mID;
     private String mName;
-    private String mRadioProgram;
-    private SimpleDateFormat mSDF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ", Locale.ENGLISH);
+    private SimpleDateFormat mSDF = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     private java.sql.Date mDateOfProgram;
     private Integer mDuration;
@@ -26,21 +27,28 @@ public class ProgramSlot {
 
     private Integer mStartTimeofDay; // in seconds
 
+    public void setID(int iID){
+        mID = iID;
+    }
+    public int getID(){
+        return mID;
+    }
+
     public void setPresenter(String iPresenter){
         mPresenter = iPresenter;
     }
     public String getPresenter(){
         return mPresenter;
     }
-    public void setProducer(String iPresenter){
-        mPresenter = iPresenter;
+    public void setProducer(String iProducer){
+        mProducer = iProducer;
     }
     public String getProducer(){
-        return mPresenter;
+        return mProducer;
     }
     public ProgramSlot(String iName){
         this.mName = iName;
-        mRadioProgram = "";
+        mID = 0;
         mDateOfProgram = new java.sql.Date(new Date().getTime());
         mDuration = 00;
         mStartTimeofDay = 00;
@@ -50,7 +58,7 @@ public class ProgramSlot {
 
     public ProgramSlot(String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime){
         this.mName = iName;
-        mRadioProgram = "";
+        mID = 0;
         mDateOfProgram = iDateofProgram;
         mDuration = iDuration;
         mStartTimeofDay = iStartTime;
@@ -61,7 +69,7 @@ public class ProgramSlot {
     public ProgramSlot(String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime,
                        String iRadioProgram, String iPresenter, String iProducer){
         this.mName = iName;
-        mRadioProgram = iRadioProgram;
+        mID = 0;
         mDateOfProgram = iDateofProgram;
         mDuration = iDuration;
         mStartTimeofDay = iStartTime;
@@ -69,12 +77,17 @@ public class ProgramSlot {
         mProducer = iProducer;
     }
 
-    public void setRadioProgram(String iRadioPr){
-        mRadioProgram = iRadioPr;
+    public ProgramSlot(int iID, String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime,
+                       String iPresenter, String iProducer){
+        this.mName = iName;
+        mID = iID;
+        mDateOfProgram = iDateofProgram;
+        mDuration = iDuration;
+        mStartTimeofDay = iStartTime;
+        mPresenter = iPresenter;
+        mProducer = iProducer;
     }
-    public String getRadioProgram(){
-        return mRadioProgram;
-    }
+
     public void setName(String iName){
         mName = iName;
     }

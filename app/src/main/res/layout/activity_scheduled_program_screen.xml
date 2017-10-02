@@ -14,11 +14,11 @@
             android:layout_height="wrap_content"
             android:text="Name"
             tools:text="Name" /> -->
-    <EditText
+    <!--<EditText
         android:id="@+id/maintain_schedule_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Schedule Name" />
+        tools:text="Schedule Name" /> -->
     <!--  <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -30,7 +30,6 @@
           android:id="@+id/maintain_schedule_dateOfPr_text_view"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@id/maintain_schedule_name_text_view"
           tools:text="one" />
      <!-- <TextView
           android:layout_width="match_parent"

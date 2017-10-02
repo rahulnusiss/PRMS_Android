@@ -39,9 +39,9 @@ public class ScheduleAdapter extends ArrayAdapter<ProgramSlot> {
         //    Word currentWord = getItem(position);
         ProgramSlot currentPS = getItem(position);
 
-        EditText radioPSName = (EditText)listItemView.findViewById(R.id.maintain_schedule_name_text_view);
+        /*EditText radioPSName = (EditText)listItemView.findViewById(R.id.maintain_schedule_name_text_view);
         radioPSName.setText(currentPS.getName(), TextView.BufferType.NORMAL);
-        setEditTextAttr(radioPSName);
+        setEditTextAttr(radioPSName);*/
 
         EditText radioPSDateofPr = (EditText)listItemView.findViewById(R.id.maintain_schedule_dateOfPr_text_view);
         radioPSDateofPr.setText("Date of program " + currentPS.getDateOfProgram().toString(), TextView.BufferType.NORMAL);
@@ -58,7 +58,7 @@ public class ScheduleAdapter extends ArrayAdapter<ProgramSlot> {
         Button btnRadioProgram = (Button) listItemView.findViewById(R.id.maintain_schedule_radioProgram_button);
         Button btnSelectProducer = (Button) listItemView.findViewById(R.id.maintain_schedule_producer_button);
         Button btnSelectPresenter = (Button) listItemView.findViewById(R.id.maintain_schedule_presenter_button);
-        btnRadioProgram.setText(currentPS.getRadioProgram());
+        btnRadioProgram.setText(currentPS.getName());
         btnSelectPresenter.setText(currentPS.getPresenter());
         btnSelectProducer.setText(currentPS.getProducer());
         setButtonsAttr(btnRadioProgram);

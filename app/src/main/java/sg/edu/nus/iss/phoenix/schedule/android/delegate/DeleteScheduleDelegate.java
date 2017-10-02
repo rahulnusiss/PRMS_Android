@@ -4,10 +4,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Scanner;
 
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
@@ -31,8 +37,19 @@ public class DeleteScheduleDelegate extends AsyncTask<ProgramSlot, Void, Boolean
 
     @Override
     protected Boolean doInBackground(ProgramSlot... params) {
+
+        String strID = null;
+        //Integer scheduleID = new Integer();
+        try {
+            Integer scheduleID = new Integer(params[0].getID());
+            strID = URLEncoder.encode(scheduleID.toString(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.v(TAG, e.getMessage());
+            return new Boolean(false);
+        }
         Uri builtUri = Uri.parse(PRMS_BASE_URL_SCHEDULE).buildUpon().build();
         builtUri = Uri.withAppendedPath(builtUri,"delete").buildUpon().build();
+        builtUri = Uri.withAppendedPath(builtUri, strID).buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url = null;
         try {
@@ -47,12 +64,27 @@ public class DeleteScheduleDelegate extends AsyncTask<ProgramSlot, Void, Boolean
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setDoInput(true);
+            //httpURLConnection.setDoOutput(true);
             httpURLConnection.setInstanceFollowRedirects(false);
             httpURLConnection.setRequestMethod("DELETE");
-            httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
+            httpURLConnection.setRequestProperty("Content-Type", "application/json" );
+            //httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
             httpURLConnection.setUseCaches (false);
             System.out.println(httpURLConnection.getResponseCode());
             Log.v(TAG, "Http DELETE response " + httpURLConnection.getResponseCode());
+            String jsonResp = null;
+            InputStream in = httpURLConnection.getInputStream();
+            Scanner scanner = new Scanner(in);
+            scanner.useDelimiter("\\A");
+           /* try {
+            if (scanner.hasNext()) {jsonResp = scanner.next();}
+                JSONObject reader = new JSONObject(jsonResp);
+                // Check response status
+                success = reader.getBoolean("status");
+            }
+            catch(Exception e){
+                success = false;
+            }*/
             success = true;
         } catch (IOException exception) {
             Log.v(TAG, exception.getMessage());

@@ -44,6 +44,7 @@ public class RetrieveProgramsDelegate extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         Uri builtUri1 = Uri.parse( PRMS_BASE_URL_RADIO_PROGRAM).buildUpon().build();
         Uri builtUri = Uri.withAppendedPath(builtUri1, params[0]).buildUpon().build();
+        //Uri builtUri = Uri.withAppendedPath(builtUri1, "all").buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url = null;
         try {

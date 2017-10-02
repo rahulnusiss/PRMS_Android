@@ -28,7 +28,6 @@ public class ScheduledProgramScreen extends AppCompatActivity {
     // Tag for logging
     private static final String TAG = ScheduledProgramScreen.class.getName();
 
-    private EditText radioPSName;
     private EditText radioPSDateofPr;
     private EditText radioPSDuration;
     private EditText radioPSStartTime;
@@ -37,6 +36,7 @@ public class ScheduledProgramScreen extends AppCompatActivity {
     private Button btnRadioProgram;
     private ProgramSlot ps2edit = null;
     private User selectedUser = null;
+    private boolean isCreate = false;
     KeyListener mRPNameEditTextKeyListener = null;
 
     @Override
@@ -47,11 +47,9 @@ public class ScheduledProgramScreen extends AppCompatActivity {
         // Get modify schedule
         //Bundle extras = getIntent().getExtras();
         ps2edit = ControlFactory.getScheduleController().getProgramSlot();
-        if( ps2edit != null)
-             ControlFactory.getScheduleController().setRadioProgram(ps2edit.getRadioProgram());
 
         // Find all relevant views that we will need to read user input from
-        radioPSName = (EditText) findViewById(R.id.maintain_schedule_name_text_view);
+        //radioPSName = (EditText) findViewById(R.id.maintain_schedule_name_text_view);
         radioPSDateofPr = (EditText) findViewById(R.id.maintain_schedule_dateOfPr_text_view);
         radioPSDuration = (EditText) findViewById(R.id.maintain_schedule_duration_text_view);
         radioPSStartTime = (EditText) findViewById(R.id.maintain_schedule_starttime_text_view);
@@ -60,12 +58,20 @@ public class ScheduledProgramScreen extends AppCompatActivity {
         btnRadioProgram = (Button) findViewById(R.id.maintain_schedule_radioProgram_button);
 
         if ( null != ps2edit){
-            radioPSName.setText(ps2edit.getName());
+            //radioPSName.setText(ps2edit.getName());
             radioPSDateofPr.setText(ps2edit.getDateOfProgram().toString());
             radioPSStartTime.setText(ScheduleUtility.parseDuration(ps2edit.getStartTime()));
             radioPSDuration.setText(ScheduleUtility.parseDuration(ps2edit.getDuration()));
+            btnSelectProducer.setText(ps2edit.getProducer());
+            btnSelectPresenter.setText(ps2edit.getPresenter());
+            btnRadioProgram.setText(ps2edit.getName());
+            btnRadioProgram.setEnabled(false);
             // Reset controllers program slot
             ControlFactory.getScheduleController().setProgramSlot(null);
+        }
+        else{
+            ps2edit = new ProgramSlot("");
+            isCreate = true;
         }
 
         btnSelectProducer.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +98,7 @@ public class ScheduledProgramScreen extends AppCompatActivity {
             }
         });
         // Keep the KeyListener for name EditText so as to enable editing after disabling it.
-        mRPNameEditTextKeyListener = radioPSName.getKeyListener();
+       // mRPNameEditTextKeyListener = radioPSDateofPr.getKeyListener();
 
     }
 
@@ -148,7 +154,7 @@ public class ScheduledProgramScreen extends AppCompatActivity {
         }
 
         ProgramSlot tempPS = new ProgramSlot("");
-        String psName = radioPSName.getText().toString();
+        String psName = btnRadioProgram.getText().toString();
         tempPS.setName(psName);
 
         String psDateofPr = radioPSDateofPr.getText().toString();
@@ -159,6 +165,12 @@ public class ScheduledProgramScreen extends AppCompatActivity {
 
         String psStartTime = radioPSStartTime.getText().toString();
         tempPS.setStartTime(psStartTime);
+
+        String psPresenter = btnSelectPresenter.getText().toString();
+        tempPS.setPresenter(psPresenter);
+
+        String psProducer = btnSelectProducer.getText().toString();
+        tempPS.setProducer(psProducer);
 
         // Check if slots overlap for current modifying schedule.
         if (checkProgramSlotOverlap(tempPS)) {
@@ -173,10 +185,15 @@ public class ScheduledProgramScreen extends AppCompatActivity {
         }
         else {
             // If intent Modify recieved null then create
-            if( ps2edit == null) {
+            if( isCreate ) {
+                tempPS.setName(ps2edit.getName());
+                tempPS.setPresenter(ps2edit.getPresenter());
+                tempPS.setProducer(ps2edit.getProducer());
                 ControlFactory.getScheduleController().selectCreateSchedule(tempPS);
+                isCreate = false;
             }
             else{ // If ps2EDIT RETRIEVED then modify
+                tempPS.setID(ps2edit.getID());
                 ControlFactory.getScheduleController().selectModifySchedule(ps2edit, tempPS);
             }
         }
@@ -186,32 +203,34 @@ public class ScheduledProgramScreen extends AppCompatActivity {
 
     public void createSchedule() {
         this.ps2edit = null;
-        radioPSName.setText("", TextView.BufferType.EDITABLE);
+        btnRadioProgram.setText("", TextView.BufferType.EDITABLE);
         radioPSDateofPr.setText("", TextView.BufferType.EDITABLE);
         radioPSDuration.setText("", TextView.BufferType.EDITABLE);
         radioPSStartTime.setText("", TextView.BufferType.EDITABLE);
-        radioPSName.setKeyListener(mRPNameEditTextKeyListener);
+        radioPSDateofPr.setKeyListener(mRPNameEditTextKeyListener);
     }
 
     public void programRetrieved(String iPrName) {
-        btnRadioProgram.setText(iPrName + "(presenter)");
-        ControlFactory.getScheduleController().setRadioProgram(ps2edit.getRadioProgram());
-        ps2edit.setRadioProgram(iPrName);
+        btnRadioProgram.setText(iPrName + "(program)");
+        ps2edit.setName(iPrName);
+        ControlFactory.getScheduleController().setRadioProgram(ps2edit.getName());
     }
 
     public void presenterRetrieved(User user) {
         selectedUser = user;
+        ps2edit.setPresenter(user.getUserId());
         btnSelectPresenter.setText(user.getUserName() + "(presenter)");
     }
 
     public void producerRetrieved(User user) {
         selectedUser = user;
+        ps2edit.setProducer(user.getUserId());
         btnSelectProducer.setText(user.getUserName() + "(producer)");
     }
 
     private boolean validateFormat(){
         String regexp = "^\\d{2}:\\d{2}:\\d{2}$";
-        if( 0 == radioPSName.length() || 0 == radioPSDateofPr.length() || 0 == radioPSDuration.length() || 0 == radioPSStartTime.length()){
+        if( 0 == btnRadioProgram.getText().length() || 0 == radioPSDateofPr.length() || 0 == radioPSDuration.length() || 0 == radioPSStartTime.length()){
             Toast toast = Toast.makeText(ScheduledProgramScreen.this, "Invalid one or more values", Toast.LENGTH_SHORT);
             toast.show();
             return false;
