@@ -170,7 +170,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        ControlFactory.getScheduleController().onDisplaySchedule(this);
+        ControlFactory.getScheduleController().onDisplayScheduleProgram(this);
     }
 
     @Override

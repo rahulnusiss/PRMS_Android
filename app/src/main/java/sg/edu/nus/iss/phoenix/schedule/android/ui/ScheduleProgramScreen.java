@@ -67,8 +67,7 @@ public class ScheduleProgramScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //alertDialogDisplay("Create Schedule", true);
-                Intent intent = new Intent(MainController.getApp(), MaintainScheduleScreen.class);
-                MainController.displayScreen(intent);
+                selectCreateSchedule();
             }
         });
 
@@ -91,6 +90,11 @@ public class ScheduleProgramScreen extends AppCompatActivity {
         // Set list listeners
         setListViewListeners();
 
+    }
+
+    private void selectCreateSchedule() {
+        Intent intent = new Intent(MainController.getApp(), MaintainScheduleScreen.class);
+        MainController.displayScreen(intent);
     }
 
     @Override
@@ -265,7 +269,7 @@ public class ScheduleProgramScreen extends AppCompatActivity {
 
     }
 
-    public void displaySchedule(List<ProgramSlot> iProgramSlots){
+    public void showProgramSlots(List<ProgramSlot> iProgramSlots){
         mScheduleAdapter.clear();
         for (int i = 0; i < iProgramSlots.size(); i++) {
             mScheduleAdapter.add(iProgramSlots.get(i));

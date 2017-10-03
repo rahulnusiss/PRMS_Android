@@ -58,7 +58,7 @@ public class ScheduleController {
 
     }
 
-    public void onDisplaySchedule(MaintainScheduleScreen scheduleScreen){
+    public void onDisplayScheduleProgram(MaintainScheduleScreen scheduleScreen){
         this.scheduleScreen = scheduleScreen;
         if (programSlot == null)
             scheduleScreen.createSchedule();
@@ -119,7 +119,7 @@ public class ScheduleController {
             listAnnualSchedule = ScheduleUtility.prepareLists(iProgramSlots);
             //ScheduleProgramScreen.setAnnualScheduleList(listAnnualSchedule);
         }
-        ScheduleProgramScreen.displaySchedule(iProgramSlots);
+        ScheduleProgramScreen.showProgramSlots(iProgramSlots);
     }
 
     public void selectCancelCreateEditSchedule(){
