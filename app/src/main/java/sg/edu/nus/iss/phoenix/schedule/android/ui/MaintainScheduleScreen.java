@@ -189,7 +189,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_editor, menu);
+        getMenuInflater().inflate(R.menu.menu_schedule, menu);
         return true;
     }
 
@@ -298,26 +298,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     }
 
     private void selectCopySchedule() {
-        //                Log.v(TAG, "Copying schedule...");
-//                if (mSelectedPS == null) { // Nothing selected from list.
-//                    Log.v(TAG, "No schedule selected"  + "...");
-//                    Toast toast = Toast.makeText(ScheduleProgramScreen.this, "Please select a schedule to copy", Toast.LENGTH_SHORT);
-//                    toast.show();
-//                }
-//                else {
-//                    ControlFactory.getScheduleController().selectCopySchedule(mSelectedPS);
-//                }
-
-//             Respond to a click on the "Delete" menu option
-//            case R.id.action_schedule_delete:
-//                this.finish();
-//                return true;
-//            // Respond to a click on the "Cancel" menu option
-//            case R.id.action_schedule_cancel:
-//                Log.v(TAG, "Canceling creating/editing schedule...");
-//                this.finish();
-//                ControlFactory.getScheduleController().selectCancelCreateEditSchedule();
-//                return true;
+        ControlFactory.getScheduleController().selectCopySchedule(ps2edit);
     }
 
     private void selectDeleteSchedule() {

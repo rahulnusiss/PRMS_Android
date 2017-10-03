@@ -81,9 +81,12 @@ public class ScheduleProgramScreen extends AppCompatActivity {
                 mYearSelected = false;
 
                 showWeek = false;
+                invalidateOptionsMenu();
                 displayAllProgramSlots();
             }
         });
+
+        showWeek = false;
 
         // Set list listeners
         setListViewListeners();
@@ -140,9 +143,8 @@ public class ScheduleProgramScreen extends AppCompatActivity {
         final Spinner spinner_year = (Spinner) MenuItemCompat.getActionView(item);
         spinner_year.setAdapter(mAnnualScheduleAdapter); // set the adapter to provide layout of rows and content
 
-        showWeek = false;
-
         spinner_year.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // If year not selected then show all
@@ -173,6 +175,11 @@ public class ScheduleProgramScreen extends AppCompatActivity {
 
     private void setWeeklyScheduleSpinner(final AnnualSchedule iAnnSchedule, Menu menu){
         showWeek = true;
+        MenuItem menuItem = menu.findItem(R.id.spinner_week);
+        if(!menuItem.isVisible()) {
+            this.invalidateOptionsMenu();
+        }
+
         mWeeklyScheduleAdapter.clear();
         for ( int i = 0; i < iAnnSchedule.retrieveAllWeeklySchedules().size() ; ++i){
             WeeklySchedule week = iAnnSchedule.retrieveAllWeeklySchedules().get(i);
