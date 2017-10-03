@@ -177,7 +177,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         // If this is a new radioprogram, hide the "Delete" menu item.
-        if (this.ps2edit == null) {
+        if (this.isCreate) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
 
@@ -278,7 +278,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                //selectSaveSchedule();
+                selectSaveSchedule();
 
                 return selectSaveSchedule();
             case R.id.action_delete:
