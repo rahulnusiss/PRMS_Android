@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 /**
  * Created by rahul on 9/19/2017.
@@ -45,12 +46,14 @@ public class ScheduleAdapter extends ArrayAdapter<ProgramSlot> {
         radioPSDateofPr.setText(currentPS.getDateOfProgram().toString(), TextView.BufferType.NORMAL);
         setEditTextAttr(radioPSDateofPr);
 
-//        EditText radioPSDuration = (EditText)listItemView.findViewById(R.id.maintain_schedule_duration_text_field);
-//        radioPSDuration.setText(currentPS.getDuration(), TextView.BufferType.NORMAL);
-//        setEditTextAttr(radioPSDuration);
+        EditText radioPSDuration = (EditText)listItemView.findViewById(R.id.maintain_schedule_duration_text_field);
+        radioPSDuration.setText(currentPS.getDuration().toString(), TextView.BufferType.NORMAL);
+        setEditTextAttr(radioPSDuration);
 
         EditText radioPSStartTime = (EditText)listItemView.findViewById(R.id.maintain_schedule_starttime_text_field);
         radioPSStartTime.setText(currentPS.getStartTime().toString(), TextView.BufferType.NORMAL);
+        radioPSStartTime.setText(ScheduleUtility.formatTime(currentPS.getStartTime().getHours(), currentPS.getStartTime().getMinutes()), TextView.BufferType.EDITABLE);
+
         setEditTextAttr(radioPSStartTime);
 
         listItemView.findViewById(R.id.maintain_schedule_endtime_text_field).setVisibility(View.GONE);

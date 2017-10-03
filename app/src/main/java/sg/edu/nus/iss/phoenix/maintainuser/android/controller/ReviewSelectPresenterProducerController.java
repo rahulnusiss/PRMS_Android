@@ -8,7 +8,7 @@ import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
 import sg.edu.nus.iss.phoenix.maintainuser.android.delegate.*;
 import sg.edu.nus.iss.phoenix.maintainuser.android.ui.*;
 import sg.edu.nus.iss.phoenix.maintainuser.entity.User;
-import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramScreen;
+import sg.edu.nus.iss.phoenix.schedule.android.ui.MaintainScheduleScreen;
 
 /**
  * Created by jackle on 27/9/17.
@@ -16,7 +16,7 @@ import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramScreen;
 
 public class ReviewSelectPresenterProducerController {
     private ReviewSelectPresenterProducerScreen m_pListScreen;
-    private ScheduledProgramScreen m_maintainScheduleScreen;
+    private MaintainScheduleScreen m_ScheduleProgramScreen;
     private User m_User;
     private String userType;
 
@@ -42,9 +42,9 @@ public class ReviewSelectPresenterProducerController {
             new RetrievePresentersProducersDelegate(this).execute("allPresenters");
     }
 
-    public void startUseCase(String userType, ScheduledProgramScreen maintainScheduleScreen){
+    public void startUseCase(String userType, MaintainScheduleScreen ScheduleProgramScreen){
         m_User = null;
-        this.m_maintainScheduleScreen = maintainScheduleScreen;
+        this.m_ScheduleProgramScreen = ScheduleProgramScreen;
         this.userType = userType;
         Intent intent = new Intent(MainController.getApp(), ReviewSelectPresenterProducerScreen.class);
         MainController.displayScreen(intent);
@@ -56,11 +56,11 @@ public class ReviewSelectPresenterProducerController {
 
     public void userSelected(User user){
         if(userType == "presenter") {
-            m_maintainScheduleScreen.presenterRetrieved(user);
+            m_ScheduleProgramScreen.presenterRetrieved(user);
         }
 
         if(userType == "producer") {
-            m_maintainScheduleScreen.producerRetrieved(user);
+            m_ScheduleProgramScreen.producerRetrieved(user);
         }
 
         m_pListScreen.finish();

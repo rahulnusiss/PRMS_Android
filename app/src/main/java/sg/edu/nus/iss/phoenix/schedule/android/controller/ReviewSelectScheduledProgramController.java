@@ -3,7 +3,7 @@ package sg.edu.nus.iss.phoenix.schedule.android.controller;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveScheduleDelegate;
-import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramScreen;
+import sg.edu.nus.iss.phoenix.schedule.android.ui.MaintainScheduleScreen;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
@@ -14,7 +14,7 @@ import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 public class ReviewSelectScheduledProgramController {
 
-    private ScheduledProgramScreen mScheduledProgramScreen;
+    private MaintainScheduleScreen mMaintainScheduleScreen;
     private ProgramSlot mProgramSlot;
     private AnnualScheduleList mAnnualScheduleList;
 
@@ -46,9 +46,9 @@ public class ReviewSelectScheduledProgramController {
 
     }
 
-    public void show(ScheduledProgramScreen scheduleProgramScreen){
+    public void show(MaintainScheduleScreen scheduleProgramScreen){
     // TBD
-        this.mScheduledProgramScreen = scheduleProgramScreen;
+        this.mMaintainScheduleScreen = scheduleProgramScreen;
         new RetrieveScheduleDelegate(this).execute("all");
     }
 

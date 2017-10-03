@@ -117,17 +117,15 @@ public class ScheduleUtility {
     }
 
     public static Integer parseDuration(String iDurationString){
-//        if ( iDurationString.length() == 0){
-//            return 0;
-//        }
-//        String[] data = iDurationString.split(":|\\+");
-//
-//        int hours  = Integer.parseInt(data[0]);
-//        int minutes = Integer.parseInt(data[1]);
-//        int seconds = Integer.parseInt(data[2]);
-//        return (seconds + 60 * minutes + 3600 * hours);
+        if ( iDurationString.length() == 0){
+            return 0;
+        }
+        String[] data = iDurationString.split(":|\\+");
 
-        return Integer.parseInt(iDurationString);
+        int hours  = Integer.parseInt(data[0]);
+        int minutes = Integer.parseInt(data[1]);
+        int seconds = Integer.parseInt(data[2]);
+        return (minutes + 60 * hours);
     }
 
     public static String parseDuration(Integer iDurationInt){
@@ -205,5 +203,19 @@ public class ScheduleUtility {
             status = true;
         }
         return status;
+    }
+
+    public static String formatDate(int year, int month, int day){
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+        String format = "yyyy/MM/dd";
+        return new SimpleDateFormat(format).format(cal.getTime());
+    }
+
+    public static String formatTime(int hour, int minute){
+        Calendar cal = Calendar.getInstance();
+        cal.set(1, 1, 1, hour, minute);
+        String format = "HH:mm";
+        return new SimpleDateFormat(format).format(cal.getTime());
     }
 }

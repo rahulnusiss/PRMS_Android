@@ -11,8 +11,8 @@ import sg.edu.nus.iss.phoenix.schedule.android.delegate.CreateScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.DeleteScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.UpdateScheduleDelegate;
+import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduleProgramScreen;
 import sg.edu.nus.iss.phoenix.schedule.android.ui.MaintainScheduleScreen;
-import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramScreen;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualScheduleList;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
@@ -25,8 +25,8 @@ public class ScheduleController {
     // Tag for logging.
     private static final String TAG = ScheduleController.class.getName();
 
-    private MaintainScheduleScreen maintainScheduleScreen;
-    private ScheduledProgramScreen scheduleScreen;
+    private ScheduleProgramScreen ScheduleProgramScreen;
+    private MaintainScheduleScreen scheduleScreen;
 
     private ProgramSlot programSlot = null;
     private AnnualScheduleList listAnnualSchedule = null;
@@ -48,17 +48,17 @@ public class ScheduleController {
 
     public void startUseCase(){
         programSlot = null;
-        Intent intent = new Intent(MainController.getApp(), MaintainScheduleScreen.class);
+        Intent intent = new Intent(MainController.getApp(), ScheduleProgramScreen.class);
         MainController.displayScreen(intent);
     }
 
-    public void onDisplayScheduleList(MaintainScheduleScreen maintainScheduleScreen){
-        this.maintainScheduleScreen = maintainScheduleScreen;
+    public void onDisplayScheduleList(ScheduleProgramScreen ScheduleProgramScreen){
+        this.ScheduleProgramScreen = ScheduleProgramScreen;
         new RetrieveScheduleDelegate(this).execute("all");
 
     }
 
-    public void onDisplaySchedule(ScheduledProgramScreen scheduleScreen){
+    public void onDisplaySchedule(MaintainScheduleScreen scheduleScreen){
         this.scheduleScreen = scheduleScreen;
         if (programSlot == null)
             scheduleScreen.createSchedule();
@@ -117,13 +117,13 @@ public class ScheduleController {
         boolean status = (iProgramSlots == null)?false:true;
         if ( status ){
             listAnnualSchedule = ScheduleUtility.prepareLists(iProgramSlots);
-            //maintainScheduleScreen.setAnnualScheduleList(listAnnualSchedule);
+            //ScheduleProgramScreen.setAnnualScheduleList(listAnnualSchedule);
         }
-        maintainScheduleScreen.displaySchedule(iProgramSlots);
+        ScheduleProgramScreen.displaySchedule(iProgramSlots);
     }
 
     public void selectCancelCreateEditSchedule(){
-
+        startUseCase();
     }
 
     public void selectCopySchedule(ProgramSlot iProgramSlot){
@@ -139,8 +139,8 @@ public class ScheduleController {
 
     }
 
-    public void selectModifySchedule(ProgramSlot iProgramSlotToEdit, ProgramSlot iNewProgramSlot){
-        new UpdateScheduleDelegate(this).execute(iProgramSlotToEdit, iNewProgramSlot);
+    public void selectModifySchedule(ProgramSlot iNewProgramSlot){
+        new UpdateScheduleDelegate(this).execute(iNewProgramSlot);
     }
 
 }

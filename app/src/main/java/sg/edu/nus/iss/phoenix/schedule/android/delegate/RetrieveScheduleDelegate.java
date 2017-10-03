@@ -23,6 +23,7 @@ import java.util.Scanner;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ReviewSelectScheduledProgramController;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.utilities.ScheduleUtility;
 
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
@@ -116,7 +117,7 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
                     int id = psJson.getInt("id");
                     String dateofProgram = psJson.getString("dateofProgram");
                     String duration = psJson.getString("duration");
-                    Integer prDuration = getDuration(duration);
+                    Integer prDuration = ScheduleUtility.parseDuration(duration);
                     String programName = psJson.getString("programName");
                     String startTime = psJson.getString("startTime");
                     //String radioProgram = psJson.getString("radioProgram");
@@ -125,7 +126,6 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
                     //Converting to Date format
                     Date dateOfPrTime = null;
                     Date sTime = null;
-                    Integer startTimePr = getDuration(startTime);
 
                     try {
                         dateOfPrTime = mSDF.parse(dateofProgram);
@@ -156,17 +156,6 @@ public class RetrieveScheduleDelegate extends AsyncTask<String, Void, String> {
             mScheduleController.scheduleRetrieved(programSlots);
         else if (mReviewSelectScheduledProgramController != null)
             mReviewSelectScheduledProgramController.programSlotsRetrieved(programSlots);
-    }
-
-    private Integer getDuration(String iDurationString){
-        String[] data = iDurationString.split(":|\\+");
-
-
-        int hours  = Integer.parseInt(data[0]);
-        int minutes = Integer.parseInt(data[1]);
-        int seconds = Integer.parseInt(data[2]);
-
-        return (seconds + 60 * minutes + 3600 * hours);
     }
 
 }

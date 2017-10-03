@@ -16,14 +16,14 @@ import sg.edu.nus.iss.phoenix.radioprogram.android.ui.MaintainProgramScreen;
 import sg.edu.nus.iss.phoenix.radioprogram.android.ui.ProgramListScreen;
 import sg.edu.nus.iss.phoenix.radioprogram.android.ui.ReviewSelectProgramScreen;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
-import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramScreen;
+import sg.edu.nus.iss.phoenix.schedule.android.ui.MaintainScheduleScreen;
 
 public class ReviewSelectProgramController {
     // Tag for logging.
     private static final String TAG = ReviewSelectProgramController.class.getName();
 
     private ReviewSelectProgramScreen reviewSelectProgramScreen;
-    private ScheduledProgramScreen scheduledProgramScreen;
+    private MaintainScheduleScreen MaintainScheduleScreen;
     private RadioProgram rpSelected = null;
     private String rpName = null;
 
@@ -37,9 +37,9 @@ public class ReviewSelectProgramController {
         MainController.displayScreen(intent);
     }
 
-    public void startUseCase(ScheduledProgramScreen iSchPrScreen) {
+    public void startUseCase(MaintainScheduleScreen iSchPrScreen) {
         rpSelected = null;
-        scheduledProgramScreen = iSchPrScreen;
+        MaintainScheduleScreen = iSchPrScreen;
         Intent intent = new Intent(MainController.getApp(), ReviewSelectProgramScreen.class);
         MainController.displayScreen(intent);
     }
@@ -60,7 +60,7 @@ public class ReviewSelectProgramController {
         // To call the base use case controller with the selected radio program.
         // At present, call the MainController instead.
         ControlFactory.getScheduleController().setRadioProgram(rpSelected.getRadioProgramName());
-        scheduledProgramScreen.programRetrieved(rpSelected.getRadioProgramName());
+        MaintainScheduleScreen.programRetrieved(rpSelected.getRadioProgramName());
         reviewSelectProgramScreen.finish();
     }
 

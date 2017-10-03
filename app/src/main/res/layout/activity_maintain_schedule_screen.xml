@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="sg.edu.nus.iss.phoenix.schedule.android.ui.MaintainScheduleScreen">
+    tools:context="sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduleProgramScreen">
 
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,7 +24,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context=".schedule.android.ui.MaintainScheduleScreen" />
+        tools:context=".schedule.android.ui.ScheduleProgramScreen" />
 
 
 
