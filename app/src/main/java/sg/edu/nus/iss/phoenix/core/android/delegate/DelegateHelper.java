@@ -2,7 +2,8 @@ package sg.edu.nus.iss.phoenix.core.android.delegate;
 
 public class DelegateHelper {
 
-    public final static String SERVER = "http://172.23.195.183:8080";
+    //public final static String SERVER = "http://172.23.195.183:8080";
+    public final static String SERVER = "http://10.0.3.2:15856";
     // RESTful parameters.
     public final static String PRMS_BASE_URL_AUTHENTICATE = SERVER + "/phoenix/rest/Login/doLogin?";
     public final static String PRMS_BASE_URL_RADIO_PROGRAM = SERVER + "/phoenix/rest/radioprogram";

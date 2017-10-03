@@ -263,7 +263,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 List<ProgramSlot> slots = week.retrieveAllProgramSlot();
                 int size3 = slots.size();
                 for (int k = 0; k < size3; ++k) {
-                    if (ps2edit == slots.get(k)) {
+                    if (ps2edit.getID() == slots.get(k).getID()) {
                         continue;
                     }
                     else{
@@ -339,13 +339,13 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         tempPS.setProducer(psProducer);
 
         // Check if slots overlap for current modifying schedule.
-        if (checkProgramSlotOverlap(tempPS)) {
+        if (checkProgramSlotOverlap(tempPS) && !isCreate ) {
             Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
             toast.show();
             isValidValues = false;
         }
 
-        if ( tempPS.isProgramSlotAssigned(ControlFactory.getScheduleController().getListAnnualSchedule())){
+        if ( isCreate && tempPS.isProgramSlotAssigned(ControlFactory.getScheduleController().getListAnnualSchedule())){
             Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
             toast.show();
             isValidValues = false;
@@ -378,10 +378,8 @@ public class MaintainScheduleScreen extends AppCompatActivity {
 
     public void editSchedule(ProgramSlot slot) {
 
-
         this.dateCalendar.setTime(slot.getDateOfProgram());
         this.radioPSDateofPr.setText(ScheduleUtility.formatDate(dateCalendar.get(Calendar.YEAR), slot.getDateOfProgram().getMonth(), slot.getDateOfProgram().getDate()), TextView.BufferType.EDITABLE);
-
 
         radioPSStartTime.setText(formatTime(slot.getStartTime().getHours(), slot.getStartTime().getMinutes()), TextView.BufferType.EDITABLE);
         startTimeCalendar.set(Calendar.HOUR_OF_DAY, slot.getStartTime().getHours());
@@ -391,7 +389,6 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         endTimeCalendar.set(Calendar.MINUTE, slot.getStartTime().getMinutes());
         endTimeCalendar.add(Calendar.MINUTE, slot.getDuration().intValue());
         radioPSEndTime.setText(formatTime(endTimeCalendar.getTime().getHours(), endTimeCalendar.getTime().getMinutes()), TextView.BufferType.EDITABLE);
-
 
         radioPSDuration.setText(slot.getDuration().toString(), TextView.BufferType.EDITABLE);
         btnSelectProducer.setText(slot.getProducer());

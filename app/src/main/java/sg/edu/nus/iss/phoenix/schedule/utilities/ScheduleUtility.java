@@ -157,7 +157,8 @@ public class ScheduleUtility {
         int hour = iDurationInt.intValue()/60;
         Integer hr = new Integer(hour);
         int rem = iDurationInt.intValue()%60;
-        Integer min = new Integer(rem/60);
+        //Integer min = new Integer(rem/60);
+        Integer min = new Integer(rem);
 
 
         String strHour = "", strMinute = "", strSecond = "";
