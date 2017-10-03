@@ -101,6 +101,8 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 startTimeCalendar.set(Calendar.MINUTE, minute);
                 radioPSStartTime.setText(ScheduleUtility.formatTime(hourOfDay, minute), TextView.BufferType.EDITABLE);
+
+                calculateDuration();
             }
         };
 
@@ -122,10 +124,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 endTimeCalendar.set(Calendar.MINUTE, minute);
                 radioPSEndTime.setText(ScheduleUtility.formatTime(hourOfDay, minute), TextView.BufferType.EDITABLE);
 
-                long diff = endTimeCalendar.getTimeInMillis() - startTimeCalendar.getTimeInMillis();
-                long diffMinutes = diff / (60 * 1000);
-
-                radioPSDuration.setText(String.format("%d", diffMinutes), TextView.BufferType.EDITABLE);
+                calculateDuration();
             }
         };
 
@@ -165,6 +164,17 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         // Keep the KeyListener for name EditText so as to enable editing after disabling it.
         // mRPNameEditTextKeyListener = radioPSDateofPr.getKeyListener();
 
+    }
+
+    private void calculateDuration() {
+        if(radioPSStartTime.getText().length() == 0 || radioPSEndTime.getText().length() == 0) {
+            return;
+        }
+
+        long diff = endTimeCalendar.getTimeInMillis() - startTimeCalendar.getTimeInMillis();
+        long diffMinutes = diff / (60 * 1000);
+
+        radioPSDuration.setText(String.format("%d", diffMinutes), TextView.BufferType.EDITABLE);
     }
 
     @Override
@@ -278,8 +288,6 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                selectSaveSchedule();
-
                 return selectSaveSchedule();
             case R.id.action_delete:
                 selectDeleteSchedule();
@@ -343,16 +351,16 @@ public class MaintainScheduleScreen extends AppCompatActivity {
             isValidValues = false;
         }
         else {
+            tempPS.setID(ps2edit.getID());
+            tempPS.setName(ps2edit.getName());
+            tempPS.setPresenter(ps2edit.getPresenter());
+            tempPS.setProducer(ps2edit.getProducer());
             // If intent Modify recieved null then create
             if( isCreate == true ) {
-                tempPS.setName(ps2edit.getName());
-                tempPS.setPresenter(ps2edit.getPresenter());
-                tempPS.setProducer(ps2edit.getProducer());
                 ControlFactory.getScheduleController().selectCreateSchedule(tempPS);
                 isCreate = false;
             }
             else{ // If ps2EDIT RETRIEVED then modify
-                tempPS.setID(ps2edit.getID());
                 ControlFactory.getScheduleController().selectModifySchedule(tempPS);
             }
         }
@@ -369,10 +377,15 @@ public class MaintainScheduleScreen extends AppCompatActivity {
     }
 
     public void editSchedule(ProgramSlot slot) {
-        //radioPSName.setText(ps2edit.getName());
-        radioPSDateofPr.setText(slot.getDateOfProgram().toString());
+
+
+        this.dateCalendar.setTime(slot.getDateOfProgram());
+        this.radioPSDateofPr.setText(ScheduleUtility.formatDate(dateCalendar.get(Calendar.YEAR), slot.getDateOfProgram().getMonth(), slot.getDateOfProgram().getDate()), TextView.BufferType.EDITABLE);
+
+
         radioPSStartTime.setText(formatTime(slot.getStartTime().getHours(), slot.getStartTime().getMinutes()), TextView.BufferType.EDITABLE);
-        this.startTimeCalendar.set(1, 1, 1, slot.getStartTime().getHours(), slot.getStartTime().getMinutes());
+        startTimeCalendar.set(Calendar.HOUR_OF_DAY, slot.getStartTime().getHours());
+        startTimeCalendar.set(Calendar.MINUTE, slot.getStartTime().getMinutes());
 
         endTimeCalendar.set(Calendar.HOUR_OF_DAY, slot.getStartTime().getHours());
         endTimeCalendar.set(Calendar.MINUTE, slot.getStartTime().getMinutes());

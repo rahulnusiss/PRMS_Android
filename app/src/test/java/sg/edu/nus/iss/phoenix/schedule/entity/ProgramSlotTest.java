@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Date;
+import java.sql.*;
 import static org.junit.Assert.*;
 
 /**
@@ -18,7 +18,7 @@ public class ProgramSlotTest {
     public void setUp() throws Exception {
         //String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime,
         //String iRadioProgram, String iPresenter, String iProducer
-        programSlot = new ProgramSlot("name",new Date(1), 2, 3, "program4", "presenter5", "producer6");
+        programSlot = new ProgramSlot("name",new Date(2017, 9, 9), 2, new Time(12, 12, 12), "program4", "presenter5", "producer6");
     }
 
     @After
@@ -28,12 +28,12 @@ public class ProgramSlotTest {
 
     @Test
     public void TestName() {
-        assertEquals(programSlot.getName(),"name1");
+        assertEquals(programSlot.getName(),"name");
     }
 
     @Test
     public void TestDateOfProgram() {
-        assertEquals(programSlot.getDateOfProgram(),new Date(1));
+        assertEquals(programSlot.getDateOfProgram(),new Date(2017, 9, 9));
     }
 
     @Test
@@ -43,18 +43,17 @@ public class ProgramSlotTest {
 
     @Test
     public void TestStartTime() {
-        assertEquals(programSlot.getStartTime(),new Integer(3));
+        assertEquals(programSlot.getStartTime(),new Time(12, 12, 12));
     }
 
-    @Test
-    public void TestRadioProgram() {
-        assertEquals(programSlot.getRadioProgram(),"program4");
-    }
 
     @Test
     public void TestPresenter() {
         assertEquals(programSlot.getPresenter(),"presenter5");
     }
 
-
+    @Test
+    public void TestProducer() {
+        assertEquals(programSlot.getProducer(),"producer6");
+    }
 }
