@@ -2,6 +2,7 @@ package sg.edu.nus.iss.phoenix.maintainuser.android.controller;
 
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import sg.edu.nus.iss.phoenix.maintainuser.android.ui.MaintainUserScreen;
 import sg.edu.nus.iss.phoenix.maintainuser.entity.User;
@@ -96,14 +97,41 @@ public class UserController {
 	 * @param success
 	 */
 	public void userCreated(boolean success){
+		String toastString = "";
+		if ( true == success){
+			toastString = "User Created";
+		}
+		else{
+			toastString = "Failed to create user";
+		}
+		Toast toast = Toast.makeText(MainController.getApp(), toastString, Toast.LENGTH_SHORT);
+		toast.show();
 		startUseCase();
 	}
 
 	public void userDeleted(boolean success){
+		String toastString = "";
+		if ( true == success){
+			toastString = "User Deleted";
+		}
+		else{
+			toastString = "Failed to delete user. Check if user is already assigned to program slot";
+		}
+		Toast toast = Toast.makeText(MainController.getApp(), toastString, Toast.LENGTH_SHORT);
+		toast.show();
 		startUseCase();
 	}
 
 	public void userUpdated(boolean success){
+		String toastString = "";
+		if ( true == success){
+			toastString = "User Updated";
+		}
+		else{
+			toastString = "Failed to update user";
+		}
+		Toast toast = Toast.makeText(MainController.getApp(), toastString, Toast.LENGTH_SHORT);
+		toast.show();
 		startUseCase();
 	}
 
