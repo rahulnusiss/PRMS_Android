@@ -128,6 +128,17 @@ public class ScheduleUtility {
         return (minutes + 60 * hours);
     }
 
+    public static Integer parseDurationFromMin(String iDurationString){
+        if ( iDurationString.length() == 0){
+            return 0;
+        }
+        String[] data = iDurationString.split(":|\\+");
+
+        int hours  = Integer.parseInt(data[0]);
+        int minutes = Integer.parseInt(data[1]);
+        return (minutes + 60 * hours);
+    }
+
     public static String parseDuration(Integer iDurationInt){
         int hour = iDurationInt.intValue()/3600;
         Integer hr = new Integer(hour);

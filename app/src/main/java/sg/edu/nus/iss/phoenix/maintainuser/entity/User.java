@@ -26,6 +26,13 @@ public class User {
 	 */
 	private ArrayList<Role> roles;
 
+	/**
+	 * The constructor
+	 * @param id
+	 * @param name
+	 * @param password
+	 * @param roles
+	 */
 	public User(String id, String name, String password, ArrayList<Role> roles){
 		this.id = id;
 		this.name = name;
@@ -33,38 +40,66 @@ public class User {
 		this.roles = roles;
 	}
 
-	public void finalize() throws Throwable {
-
-	}
-
+	/**
+	 * To get user Id
+	 * @return string user id
+	 */
 	public String getUserId() {
 		return id;
 	}
 
+	/**
+	 * To get user name
+	 * @return string user name
+	 */
 	public String getUserName() {
 		return name;
 	}
 
+	/**
+	 * Getter
+	 * @return string password
+	 */
 	public String getUserPassword() {
 		return password;
 	}
 
+	/**
+	 * To get roles
+	 * @return list of roles
+	 */
 	public ArrayList<Role> getRoles() {
 		return roles;
 	}
 
+	/**
+	 * Setter
+	 * @param id
+	 */
 	public void setUserId(String id) {
 		this.id = id;
 	}
 
+	/**
+	 * setter
+	 * @param name
+	 */
 	public void setUserName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * setter
+	 * @param password
+	 */
 	public void setUserPassword(String password) {
 		this.password = password;
 	}
 
+	/**
+	 * setter
+	 * @param roles list of roles
+	 */
 	public void setUserRoles(ArrayList<Role> roles) {
 		this.roles = roles;
 	}

@@ -18,7 +18,7 @@ public class ProgramSlotTest {
     public void setUp() throws Exception {
         //String iName, java.sql.Date iDateofProgram, Integer iDuration, Integer iStartTime,
         //String iRadioProgram, String iPresenter, String iProducer
-        programSlot = new ProgramSlot("name1", new Date(1), 2, 3, "program4", "presenter5", "producer6");
+        programSlot = new ProgramSlot("name",new Date(1), 2, 3, "program4", "presenter5", "producer6");
     }
 
     @After

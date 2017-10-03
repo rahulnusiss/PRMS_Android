@@ -17,13 +17,6 @@ public class Role {
 	 */
 	private String role;
 
-	public Role(){
-
-	}
-
-	public void finalize() throws Throwable {
-
-	}
 	/**
 	 * The constructor of the user role.
 	 * 
@@ -33,6 +26,10 @@ public class Role {
 		this.role = role;
 	}
 
+	/**
+	 * To get role
+	 * @return string role
+	 */
 	public String getRole() {
 		return role;
 	}

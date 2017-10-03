@@ -219,11 +219,11 @@ public class MaintainScheduleScreen extends AppCompatActivity {
             return false;
         }
         // Check valid duration input
-//        else if(!String.valueOf(radioPSDuration.getText()).matches(regexp) || !ScheduleUtility.validateDuration(radioPSDuration.getText().toString())){
-//            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid Duration value", Toast.LENGTH_SHORT);
+//        else if( !ScheduleUtility.validateDuration(radioPSDuration.getText().toString())){
+ //           Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid Duration value", Toast.LENGTH_SHORT);
 //            toast.show();
 //            return false;
-//        }
+  //      }
 
         else if(this.endTimeCalendar.getTimeInMillis() - this.startTimeCalendar.getTimeInMillis() <= 0){
             Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Invalid Start Time value", Toast.LENGTH_SHORT);
@@ -231,11 +231,11 @@ public class MaintainScheduleScreen extends AppCompatActivity {
             return false;
         }
 
-//        else if(!ScheduleUtility.validateTime(radioPSDateofPr.getText().toString(),ScheduleUtility.parseDuration(radioPSStartTime.getText().toString()))){
-//            Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Date and time entered is invalid, should be after current time.", Toast.LENGTH_SHORT);
-//            toast.show();
-//            return false;
-//        }
+ //       else if(!ScheduleUtility.validateTime(radioPSDateofPr.getText().toString(),ScheduleUtility.parseDurationFromMin(radioPSStartTime.getText().toString()))){
+ //           Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Date and time entered is invalid, should be after current time.", Toast.LENGTH_SHORT);
+ //           toast.show();
+ //           return false;
+ //       }
 
         return true;
     }
@@ -278,9 +278,9 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                selectSaveSchedule();
+                //selectSaveSchedule();
 
-                return true;
+                return selectSaveSchedule();
             case R.id.action_delete:
                 selectDeleteSchedule();
 
@@ -305,10 +305,10 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         ControlFactory.getScheduleController().selectDeleteSchedule(this.ps2edit);
     }
 
-    private void selectSaveSchedule() {
+    private boolean selectSaveSchedule() {
         boolean isValidValues = validateFormat();
         if ( !isValidValues ){
-            return;
+            return isValidValues;
         }
 
         ProgramSlot tempPS = new ProgramSlot("");
@@ -334,6 +334,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         if (checkProgramSlotOverlap(tempPS)) {
             Toast toast = Toast.makeText(MaintainScheduleScreen.this, "Program slot already assigned. Please change timings", Toast.LENGTH_SHORT);
             toast.show();
+            isValidValues = false;
         }
 
         if ( tempPS.isProgramSlotAssigned(ControlFactory.getScheduleController().getListAnnualSchedule())){
@@ -343,7 +344,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
         }
         else {
             // If intent Modify recieved null then create
-            if( this.ps2edit == null ) {
+            if( isCreate == true ) {
                 tempPS.setName(ps2edit.getName());
                 tempPS.setPresenter(ps2edit.getPresenter());
                 tempPS.setProducer(ps2edit.getProducer());
@@ -355,6 +356,7 @@ public class MaintainScheduleScreen extends AppCompatActivity {
                 ControlFactory.getScheduleController().selectModifySchedule(tempPS);
             }
         }
+        return isValidValues;
     }
 
     public void createSchedule() {
